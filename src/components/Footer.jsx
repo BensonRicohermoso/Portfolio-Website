@@ -20,11 +20,11 @@ const socials = [
 
 export default function Footer() {
   return (
-    <footer id="contact" className="py-16 px-6 border-t border-slate-700/50">
+    <footer id="contact" className="py-16 px-6 border-t border-[#222222]">
       <div className="max-w-6xl mx-auto text-center">
         <h2 className="text-3xl font-bold text-white mb-2">Connect With Me</h2>
-        <div className="w-16 h-1 bg-indigo-500 rounded mx-auto mb-8" />
-        <p className="text-slate-400 mb-10 max-w-md mx-auto">
+        <div className="w-16 h-1 bg-white rounded mx-auto mb-8" />
+        <p className="text-neutral-500 mb-10 max-w-md mx-auto">
           Feel free to reach out for collaborations, opportunities, or just a friendly chat.
         </p>
 
@@ -35,7 +35,7 @@ export default function Footer() {
               href={s.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3 text-slate-300 hover:text-indigo-400 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-indigo-500/50 px-5 py-3 rounded-xl transition-all duration-200 group"
+              className="flex items-center gap-3 text-neutral-400 hover:text-white bg-dark-card hover:bg-[#1a1a1a] border border-[#222222] hover:border-white/30 px-5 py-3 rounded-xl transition-all duration-200 group"
             >
               <span className="group-hover:scale-110 transition-transform duration-200">{s.icon}</span>
               <span className="text-sm font-medium">{s.label}</span>
@@ -43,8 +43,8 @@ export default function Footer() {
           ))}
         </div>
 
-        <p className="text-slate-600 text-xs mt-12">
-          © {new Date().getFullYear()} Alex. Built with React & Tailwind CSS.
+        <p className="text-neutral-700 text-xs mt-12">
+          © {new Date().getFullYear()} Benson. Built with React & Tailwind CSS.
         </p>
       </div>
     </footer>

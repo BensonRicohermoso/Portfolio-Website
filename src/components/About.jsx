@@ -11,8 +11,8 @@ export default function About() {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-3xl font-bold text-white mb-2">About Me</h2>
-          <div className="w-16 h-1 bg-indigo-500 rounded mb-8" />
-          <div className="space-y-5 text-slate-300 leading-relaxed">
+          <div className="w-16 h-1 bg-white rounded mb-8" />
+          <div className="space-y-5 text-neutral-400 leading-relaxed">
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
               incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
