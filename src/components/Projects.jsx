@@ -45,7 +45,7 @@ export default function Projects() {
           className="mb-12"
         >
           <h2 className="text-3xl font-bold text-white mb-2">Projects</h2>
-          <div className="w-16 h-1 bg-indigo-500 rounded" />
+          <div className="w-16 h-1 bg-white rounded" />
         </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -56,20 +56,19 @@ export default function Projects() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden hover:border-indigo-500/50 hover:-translate-y-1 transition-all duration-300"
+              className="bg-dark-card border border-[#222222] rounded-2xl overflow-hidden hover:border-white/30 hover:-translate-y-1 transition-all duration-300"
             >
-              {/* Placeholder image */}
-              <div className="h-44 bg-slate-700 flex items-center justify-center">
-                <span className="text-slate-500 text-sm">Project Image</span>
+              <div className="h-44 bg-[#0a0a0a] flex items-center justify-center">
+                <span className="text-neutral-600 text-sm">Project Image</span>
               </div>
               <div className="p-5">
                 <h3 className="text-white font-semibold text-lg mb-2">{project.title}</h3>
-                <p className="text-slate-400 text-sm mb-4 leading-relaxed">{project.description}</p>
+                <p className="text-neutral-500 text-sm mb-4 leading-relaxed">{project.description}</p>
                 <div className="flex flex-wrap gap-2">
                   {project.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="text-xs bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded-full"
+                      className="text-xs bg-white/10 text-neutral-300 border border-white/20 px-2 py-0.5 rounded-full"
                     >
                       {tag}
                     </span>

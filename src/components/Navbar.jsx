@@ -1,23 +1,54 @@
-const links = ['Home', 'About', 'Tech Stack', 'Projects', 'Certifications', 'Contact']
+import { AiOutlineHome, AiOutlineUser } from 'react-icons/ai'
+import { MdOutlineStackedBarChart } from 'react-icons/md'
+import { VscProject } from 'react-icons/vsc'
+import { RiAwardLine } from 'react-icons/ri'
+import { BiEnvelope } from 'react-icons/bi'
+import Dock from './Dock'
+
+const items = [
+  {
+    icon: <AiOutlineHome size={20} className="text-white" />,
+    label: 'Home',
+    onClick: () => document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' }),
+  },
+  {
+    icon: <AiOutlineUser size={20} className="text-white" />,
+    label: 'About',
+    onClick: () => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' }),
+  },
+  {
+    icon: <MdOutlineStackedBarChart size={20} className="text-white" />,
+    label: 'Tech Stack',
+    onClick: () => document.getElementById('tech-stack')?.scrollIntoView({ behavior: 'smooth' }),
+  },
+  {
+    icon: <VscProject size={20} className="text-white" />,
+    label: 'Projects',
+    onClick: () => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' }),
+  },
+  {
+    icon: <RiAwardLine size={20} className="text-white" />,
+    label: 'Certifications',
+    onClick: () => document.getElementById('certifications')?.scrollIntoView({ behavior: 'smooth' }),
+  },
+  {
+    icon: <BiEnvelope size={20} className="text-white" />,
+    label: 'Contact',
+    onClick: () => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }),
+  },
+]
 
 export default function Navbar() {
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-slate-900/60 border-b border-slate-700/50">
-      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        <span className="text-indigo-400 font-bold text-xl tracking-wide">{'<Portfolio />'}</span>
-        <ul className="hidden md:flex gap-6 text-sm text-slate-300">
-          {links.map((link) => (
-            <li key={link}>
-              <a
-                href={`#${link.toLowerCase().replace(' ', '-')}`}
-                className="hover:text-indigo-400 transition-colors duration-200"
-              >
-                {link}
-              </a>
-            </li>
-          ))}
-        </ul>
+    <div className="fixed bottom-4 left-0 right-0 z-50 flex justify-center pointer-events-none">
+      <div className="pointer-events-auto">
+        <Dock
+          items={items}
+          panelHeight={68}
+          baseItemSize={50}
+          magnification={70}
+        />
       </div>
-    </nav>
+    </div>
   )
 }
