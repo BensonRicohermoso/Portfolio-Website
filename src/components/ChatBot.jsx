@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MessageCircle, X, Send, Bot } from 'lucide-react'
-import { GoogleGenerativeAI } from '@google/generative-ai'
 
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY
+// Always use backend API route to keep API keys secret
+const BACKEND_CHAT_API = '/api/chat';
 
 const SYSTEM_PROMPT = `You are a personal AI assistant for Benson Ricohermoso's portfolio website. You only answer questions related to Benson and his work. If asked anything unrelated, politely redirect the conversation back to Benson.
 
@@ -51,7 +51,7 @@ PROJECTS:
 
 Always be friendly, concise, and professional. Only answer questions about Benson Ricohermoso.`
 
-const genAI = new GoogleGenerativeAI(API_KEY)
+
 
 export default function ChatBot() {
   const [open, setOpen] = useState(false)
@@ -61,42 +61,51 @@ export default function ChatBot() {
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const bottomRef = useRef(null)
-  const chatRef = useRef(null)
+
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  useEffect(() => {
-    if (open && !chatRef.current) {
-      chatRef.current = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' }).startChat({
-        history: [],
-        generationConfig: { maxOutputTokens: 500 },
-      })
-    }
-  }, [open])
+  // Helper to build the chat history for backend
+  const buildChatHistory = (userText) => {
+    const chatMessages = [
+      { role: 'system', content: SYSTEM_PROMPT },
+      ...messages.filter(m => m.role === 'user' || m.role === 'bot').map(m => ({
+        role: m.role === 'bot' ? 'assistant' : 'user',
+        content: m.text
+      })),
+      { role: 'user', content: userText }
+    ];
+    return chatMessages;
+  }
 
   const sendMessage = async () => {
-    if (!input.trim() || loading) return
-    const userText = input.trim()
-    setInput('')
-    setMessages(prev => [...prev, { role: 'user', text: userText }])
-    setLoading(true)
+    if (!input.trim() || loading) return;
+    const userText = input.trim();
+    setInput('');
+    setMessages(prev => [...prev, { role: 'user', text: userText }]);
+    setLoading(true);
 
     try {
-      if (!chatRef.current) {
-        chatRef.current = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' }).startChat({
-          history: [],
-          generationConfig: { maxOutputTokens: 500 },
+      const response = await fetch(BACKEND_CHAT_API, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          messages: buildChatHistory(userText),
         })
-      }
-      const result = await chatRef.current.sendMessage(`${SYSTEM_PROMPT}\n\nUser: ${userText}`)
-      const text = result.response.text()
-      setMessages(prev => [...prev, { role: 'bot', text }])
-    } catch {
-      setMessages(prev => [...prev, { role: 'bot', text: "Sorry, I couldn't process that. Please try again." }])
+      });
+      if (!response.ok) throw new Error('Chat API error');
+      const data = await response.json();
+      const text = data.text || "Sorry, I couldn't process that. Please try again.";
+      setMessages(prev => [...prev, { role: 'bot', text }]);
+    } catch (err) {
+      console.error('Chat API error:', err);
+      setMessages(prev => [...prev, { role: 'bot', text: "Sorry, I couldn't process that. Please try again." }]);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
