@@ -10,13 +10,13 @@ const stats = [
 
 const contactInfo = [
   { icon: <Mail size={16} />, label: 'Email', value: 'bensonricohermoso@gmail.com' },
-  { icon: <Phone size={16} />, label: 'Phone', value: '+63 XXX XXX XXXX' },
+  { icon: <Phone size={16} />, label: 'Phone', value: '+63969 079 6200' },
   { icon: <MapPin size={16} />, label: 'Location', value: 'Philippines' },
 ]
 
 const socials = [
-  { icon: <Linkedin size={15} />, label: 'LinkedIn', href: 'https://linkedin.com/in/your-profile' },
-  { icon: <Github size={15} />, label: 'GitHub', href: 'https://github.com/your-username' },
+  { icon: <Linkedin size={15} />, label: 'LinkedIn', href: 'https://www.linkedin.com/in/benson-ricohermoso-0ab240302/' },
+  { icon: <Github size={15} />, label: 'GitHub', href: 'https://github.com/BensonRicohermoso' },
 ]
 
 export default function Footer() {
