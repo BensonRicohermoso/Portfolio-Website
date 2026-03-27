@@ -2,56 +2,19 @@ import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MessageCircle, X, Send, Bot } from 'lucide-react'
 
-// Always use backend API route to keep API keys secret
+// This matches the Vercel Serverless Function path at /api/chat.js
 const BACKEND_CHAT_API = '/api/chat';
 
 const SYSTEM_PROMPT = `You are a personal AI assistant for Benson Ricohermoso's portfolio website. You only answer questions related to Benson and his work. If asked anything unrelated, politely redirect the conversation back to Benson.
 
 Here is everything you know about Benson:
-
 NAME: Benson Ricohermoso
-
 ROLE: Full-Stack Web Developer & AI Specialist
-
-ABOUT:
-Benson is a full-stack web developer passionate about building intelligent, scalable applications with JavaScript, TypeScript, and Python. His projects span from clinical management systems and financial chatbots to AI-powered platforms, focusing on enhancing user experience, data accessibility, and system reliability.
-He has contributed to organizations by streamlining workflows and improving efficiency — through data management at a veterinary clinic or developing full-stack solutions that cut errors and boost performance. His work has delivered measurable impact such as reducing response latency by 45% and improving reporting efficiency by 30%.
-He has been diving deeper into artificial intelligence, integrating NLP and LLMs into modern applications, creating AI-driven chat platforms and finance tools.
-
-TECH STACK:
-- Frontend: React, Next.js, JavaScript, TypeScript, Tailwind CSS
-- Backend: Python (FastAPI, Flask), C++
-- AI & APIs: OpenAI, NLP, LLMs, RESTful APIs
-- Database & Cloud: MySQL, MongoDB, SQLite, Vercel, Firebase, Railway
-
-CERTIFICATIONS:
-- AWS Cloud Support Associate (Coursera)
-- English for Media Literacy MOOC (OPEN)
-
-AWARDS:
-- 2nd Runner-up – Glitch Hunt, Google Developer Groups Community (Hackfest 2026)
-- Dean's Lister – First Year College and Second Year 1st Semester
-
-SEMINARS & WORKSHOPS:
-- Mastering Programming & Data Analytics Event (LMS & Power BI)
-
-CONTACT:
-- Email: bensonricohermoso@gmail.com
-- Location: Philippines
-- GitHub: github.com/your-username
-- LinkedIn: linkedin.com/in/your-profile
-
-PROJECTS:
-- AI Chat Assistant (Python, PyTorch, React, FastAPI)
-- E-Commerce Platform (Next.js, Node.js, PostgreSQL, Stripe)
-- Image Classifier (Python, TensorFlow, OpenCV, Flask)
-- Portfolio Dashboard (React, TypeScript, D3.js, REST API)
-- Task Manager App (React, Express, MongoDB, Socket.io)
-- NLP Sentiment Analyzer (Python, HuggingFace, Scikit-learn, Pandas)
-
-Always be friendly, concise, and professional. Only answer questions about Benson Ricohermoso.`
-
-
+ABOUT: Benson is a full-stack web developer passionate about building intelligent, scalable applications with JavaScript, TypeScript, and Python.
+TECH STACK: Frontend (React, Next.js, Tailwind), Backend (Python, FastAPI, C++), AI (OpenAI, Groq, LLMs), DB (MySQL, MongoDB).
+AWARDS: 2nd Runner-up – Glitch Hunt (Hackfest 2026), Dean's Lister.
+CONTACT: bensonricohermoso@gmail.com
+Always be friendly, concise, and professional. Only answer questions about Benson Ricohermoso.`;
 
 export default function ChatBot() {
   const [open, setOpen] = useState(false)
@@ -62,14 +25,12 @@ export default function ChatBot() {
   const [loading, setLoading] = useState(false)
   const bottomRef = useRef(null)
 
-
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+  }, [messages, loading])
 
-  // Helper to build the chat history for backend
   const buildChatHistory = (userText) => {
-    const chatMessages = [
+    return [
       { role: 'system', content: SYSTEM_PROMPT },
       ...messages.filter(m => m.role === 'user' || m.role === 'bot').map(m => ({
         role: m.role === 'bot' ? 'assistant' : 'user',
@@ -77,11 +38,11 @@ export default function ChatBot() {
       })),
       { role: 'user', content: userText }
     ];
-    return chatMessages;
   }
 
   const sendMessage = async () => {
     if (!input.trim() || loading) return;
+    
     const userText = input.trim();
     setInput('');
     setMessages(prev => [...prev, { role: 'user', text: userText }]);
@@ -92,18 +53,26 @@ export default function ChatBot() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         body: JSON.stringify({
           messages: buildChatHistory(userText),
         })
       });
-      if (!response.ok) throw new Error('Chat API error');
+
       const data = await response.json();
-      const text = data.text || "Sorry, I couldn't process that. Please try again.";
-      setMessages(prev => [...prev, { role: 'bot', text }]);
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Chat API error');
+      }
+
+      // Ensure we extract the 'text' property returned by our api/chat.js
+      const botResponse = data.text || "I'm sorry, I'm having trouble connecting right now.";
+      setMessages(prev => [...prev, { role: 'bot', text: botResponse }]);
+      
     } catch (err) {
-      console.error('Chat API error:', err);
-      setMessages(prev => [...prev, { role: 'bot', text: "Sorry, I couldn't process that. Please try again." }]);
+      console.error('Frontend Chat Error:', err);
+      setMessages(prev => [...prev, { role: 'bot', text: "Sorry, I couldn't process that. Please check your connection or try again later." }]);
     } finally {
       setLoading(false);
     }
@@ -151,53 +120,54 @@ export default function ChatBot() {
               </div>
               <div>
                 <p className="text-white text-sm font-semibold">Benson's Assistant</p>
-                <p className="text-neutral-500 text-xs">Ask me about Benson</p>
+                <p className="text-neutral-500 text-xs">AI-Powered Portfolio Guide</p>
               </div>
             </div>
 
-            {/* Messages */}
-            <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+            {/* Messages Area */}
+            <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 scrollbar-hide">
               {messages.map((msg, i) => (
                 <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   <div
-                    className={`max-w-[80%] px-3 py-2 rounded-2xl text-sm leading-relaxed ${
+                    className={`max-w-[85%] px-4 py-2 rounded-2xl text-sm leading-relaxed ${
                       msg.role === 'user'
-                        ? 'bg-white text-black rounded-br-sm'
-                        : 'bg-[#1a1a1a] text-neutral-300 border border-[#2a2a2a] rounded-bl-sm'
+                        ? 'bg-white text-black rounded-br-none shadow-sm'
+                        : 'bg-[#1a1a1a] text-neutral-300 border border-[#2a2a2a] rounded-bl-none'
                     }`}
                   >
                     {msg.text}
                   </div>
                 </div>
               ))}
+              
               {loading && (
                 <div className="flex justify-start">
-                  <div className="bg-[#1a1a1a] border border-[#2a2a2a] px-4 py-2.5 rounded-2xl rounded-bl-sm flex gap-1.5 items-center">
-                    <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                  <div className="bg-[#1a1a1a] border border-[#2a2a2a] px-4 py-3 rounded-2xl rounded-bl-none flex gap-1.5 items-center shadow-sm">
+                    <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                   </div>
                 </div>
               )}
               <div ref={bottomRef} />
             </div>
 
-            {/* Input */}
-            <div className="px-3 py-3 border-t border-[#222222] flex gap-2">
+            {/* Input Bar */}
+            <div className="px-3 py-3 border-t border-[#222222] flex gap-2 bg-[#0d0d0d]">
               <input
                 type="text"
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 onKeyDown={handleKey}
-                placeholder="Ask about Benson..."
-                className="flex-1 bg-[#1a1a1a] border border-[#2a2a2a] rounded-full px-4 py-2 text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-white/30 transition-colors"
+                placeholder="Ask about Benson's projects..."
+                className="flex-1 bg-[#1a1a1a] border border-[#2a2a2a] rounded-full px-4 py-2 text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-white/20 transition-all"
               />
               <button
                 onClick={sendMessage}
                 disabled={!input.trim() || loading}
-                className="w-9 h-9 rounded-full bg-white hover:bg-neutral-200 text-black flex items-center justify-center transition-colors duration-200 disabled:opacity-40 flex-shrink-0"
+                className="w-10 h-10 rounded-full bg-white hover:bg-neutral-200 text-black flex items-center justify-center transition-all duration-200 disabled:opacity-30 flex-shrink-0"
               >
-                <Send size={14} />
+                <Send size={16} />
               </button>
             </div>
           </motion.div>
