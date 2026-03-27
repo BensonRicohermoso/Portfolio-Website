@@ -14,19 +14,13 @@ export default function About() {
           <div className="w-16 h-1 bg-white rounded mb-8" />
           <div className="space-y-5 text-neutral-400 leading-relaxed">
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-              incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-              exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+              I'm a full-stack web developer passionate about building intelligent, scalable applications with JavaScript, TypeScript, and Python. My projects span from clinical management systems and financial chatbots to AI-powered platforms, where I focus on enhancing user experience, data accessibility, and system reliability.
             </p>
             <p>
-              Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-              fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa
-              qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus.
+              I've contributed to organizations by streamlining workflows and improving efficiency—whether through data management at a veterinary clinic or developing full-stack solutions that cut errors and boost performance. My work has consistently delivered measurable impact, such as reducing response latency by 45% and improving reporting efficiency by 30%.
             </p>
             <p>
-              Nulla gravida orci a odio. Nullam varius, turpis molestie dictum semper, nunc augue
-              iaculis purus, quis volutpat mi diam id nunc. My goal is to build impactful software
-              that bridges the gap between cutting-edge AI research and real-world applications.
+              Recently, I've been diving deeper into artificial intelligence, integrating NLP and LLMs into modern applications. This exploration has led me to create AI-driven chat platforms and finance tools that transform how users interact with data. My goal is to continue leveraging AI and cloud technologies to build secure, innovative solutions that empower businesses and communities.
             </p>
           </div>
         </motion.div>

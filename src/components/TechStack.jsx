@@ -1,21 +1,53 @@
 import { motion } from 'framer-motion'
-import { Monitor, Server, Brain } from 'lucide-react'
+import { Monitor, Server, Brain, Database } from 'lucide-react'
+import { FaReact, FaPython, FaAws } from 'react-icons/fa'
+import { SiTailwindcss, SiTypescript, SiNextdotjs, SiJavascript, SiCplusplus, SiFastapi, SiFlask, SiOpenai, SiMysql, SiMongodb, SiPostgresql, SiSqlite, SiVercel, SiFirebase, SiRailway } from 'react-icons/si'
+import { TbApi } from 'react-icons/tb'
+import { BsBraces } from 'react-icons/bs'
 
 const categories = [
   {
     icon: <Monitor className="text-white" size={28} />,
     title: 'Frontend',
-    skills: ['React', 'Tailwind CSS', 'TypeScript', 'Next.js', 'Framer Motion'],
+    skills: [
+      { label: 'React', icon: <FaReact /> },
+      { label: 'Next.js', icon: <SiNextdotjs /> },
+      { label: 'JavaScript', icon: <SiJavascript /> },
+      { label: 'TypeScript', icon: <SiTypescript /> },
+      { label: 'Tailwind CSS', icon: <SiTailwindcss /> },
+    ],
   },
   {
     icon: <Server className="text-white" size={28} />,
     title: 'Backend',
-    skills: ['Node.js', 'Python', 'Express', 'PostgreSQL', 'REST APIs'],
+    skills: [
+      { label: 'Python', icon: <FaPython /> },
+      { label: 'FastAPI', icon: <SiFastapi /> },
+      { label: 'Flask', icon: <SiFlask /> },
+      { label: 'C++', icon: <SiCplusplus /> },
+    ],
   },
   {
     icon: <Brain className="text-white" size={28} />,
-    title: 'AI / Machine Learning',
-    skills: ['PyTorch', 'Scikit-learn', 'TensorFlow', 'Pandas', 'OpenCV'],
+    title: 'AI & APIs',
+    skills: [
+      { label: 'OpenAI', icon: <SiOpenai /> },
+      { label: 'NLP', icon: <BsBraces /> },
+      { label: 'LLMs', icon: <BsBraces /> },
+      { label: 'RESTful APIs', icon: <TbApi /> },
+    ],
+  },
+  {
+    icon: <Database className="text-white" size={28} />,
+    title: 'Database & Cloud',
+    skills: [
+      { label: 'MySQL', icon: <SiMysql /> },
+      { label: 'MongoDB', icon: <SiMongodb /> },
+      { label: 'SQLite', icon: <SiSqlite /> },
+      { label: 'Vercel', icon: <SiVercel /> },
+      { label: 'Firebase', icon: <SiFirebase /> },
+      { label: 'Railway', icon: <SiRailway /> },
+    ],
   },
 ]
 
@@ -34,7 +66,7 @@ export default function TechStack() {
           <div className="w-16 h-1 bg-white rounded" />
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {categories.map((cat, i) => (
             <motion.div
               key={cat.title}
@@ -48,11 +80,11 @@ export default function TechStack() {
                 {cat.icon}
                 <h3 className="text-lg font-semibold text-white">{cat.title}</h3>
               </div>
-              <ul className="space-y-2">
+              <ul className="space-y-2.5">
                 {cat.skills.map((skill) => (
-                  <li key={skill} className="flex items-center gap-2 text-neutral-400 text-sm">
-                    <span className="w-1.5 h-1.5 rounded-full bg-white flex-shrink-0" />
-                    {skill}
+                  <li key={skill.label} className="flex items-center gap-2.5 text-neutral-400 text-sm">
+                    <span className="text-base text-neutral-300 flex-shrink-0">{skill.icon}</span>
+                    {skill.label}
                   </li>
                 ))}
               </ul>
