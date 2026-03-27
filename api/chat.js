@@ -1,23 +1,23 @@
-// src/api/chat.js
-// Vercel/Netlify/Node.js API route for chat proxy
+// api/chat.js
+export const config = {
+  runtime: 'edge', // Using Edge runtime is faster and has built-in fetch support
+};
 
-export default async function handler(req, res) {
+export default async function handler(req) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  const { messages } = req.body;
-  if (!messages) {
-    return res.status(400).json({ error: 'Missing messages' });
-  }
-
-  // Use environment variable for API key
-  const apiKey = process.env.GROQ_API_KEY;
-  if (!apiKey) {
-    return res.status(500).json({ error: 'API key not set in environment' });
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405 });
   }
 
   try {
+    const { messages } = await req.json();
+    
+    // Check for the key (Make sure it's named GROQ_API_KEY in Vercel)
+    const apiKey = process.env.GROQ_API_KEY;
+
+    if (!apiKey) {
+      return new Response(JSON.stringify({ error: 'API key not configured' }), { status: 500 });
+    }
+
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -30,14 +30,15 @@ export default async function handler(req, res) {
         max_tokens: 500,
       }),
     });
-    if (!response.ok) {
-      const error = await response.text();
-      return res.status(500).json({ error });
-    }
+
     const data = await response.json();
-    const text = data.choices?.[0]?.message?.content?.trim() || '';
-    return res.status(200).json({ text });
+    const text = data.choices?.[0]?.message?.content || 'No response from AI';
+
+    return new Response(JSON.stringify({ text }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    return new Response(JSON.stringify({ error: err.message }), { status: 500 });
   }
 }
