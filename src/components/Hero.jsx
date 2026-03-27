@@ -136,8 +136,77 @@ export default function Hero() {
             </button>
           </div>
         </div>
-        {/* Profile Card and Preview Cards beside each other */}
-        <HeroProfileAndPreview />
+        {/* Responsive: original stacked layout on desktop, side-by-side only on mobile */}
+        {/* Mobile (sm and below): side-by-side */}
+        <div className="block sm:hidden w-full">
+          <HeroProfileAndPreview />
+        </div>
+        {/* Desktop (md and up): preview cards left, profile picture right */}
+        <div className="hidden sm:flex w-full flex-row items-center justify-center gap-12">
+          {/* Preview Cards */}
+          <motion.div
+            className="flex flex-col items-center"
+            initial={{ opacity: 0, x: -40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7 }}
+          >
+            {/* Category Card */}
+            <div className="w-28 sm:w-36 md:w-48 bg-[#111111] border border-[#222222] rounded-2xl overflow-hidden mt-0 mx-auto">
+              <div className="flex items-center justify-between px-2 py-1">
+                <span className="text-white text-xs font-semibold tracking-wide">
+                  {categories[catIndex].label}
+                </span>
+              </div>
+              <div className="relative h-16 sm:h-20 md:h-24 bg-[#0a0a0a] overflow-hidden flex items-center justify-center">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={catIndex}
+                    className="absolute inset-0 flex items-center justify-center"
+                    initial={{ opacity: 0, x: 30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -30 }}
+                    transition={{ duration: 0.25 }}
+                  >
+                    <img
+                      src={categories[catIndex].image}
+                      alt={`${categories[catIndex].label} Preview`}
+                      className="h-12 sm:h-16 md:h-20 object-contain transition-transform duration-300 cursor-zoom-in hover:scale-110 w-auto max-w-full"
+                      style={{ touchAction: 'manipulation' }}
+                      onClick={() => setShowImageModal(true)}
+                    />
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+              <div className="flex items-center justify-between px-2 py-0.5">
+                <button onClick={prev} className="text-neutral-400 hover:text-white transition-colors">
+                  <ChevronLeft size={16} />
+                </button>
+                <div className="flex gap-1.5">
+                  {categories.map((_, i) => (
+                    <span
+                      key={i}
+                      className={`w-1 h-1 rounded-full transition-colors duration-200 ${i === catIndex ? 'bg-white' : 'bg-white/25'}`}
+                    />
+                  ))}
+                </div>
+                <button onClick={next} className="text-neutral-400 hover:text-white transition-colors">
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            </div>
+          </motion.div>
+          {/* Profile Pic */}
+          <motion.div
+            className="flex-shrink-0"
+            initial={{ opacity: 0, scale: 0.85 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7 }}
+          >
+            <div className="w-20 h-20 sm:w-28 sm:h-28 md:w-40 md:h-40 rounded-2xl border-4 border-white glow-border overflow-hidden">
+              <img src="/images/profile.jpg" alt="Benson Ricohermoso" className="w-full h-full object-cover" />
+            </div>
+          </motion.div>
+        </div>
 
       </div>
 
