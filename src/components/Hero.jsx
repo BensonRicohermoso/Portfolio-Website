@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+
 import { Mail, FileText, X, Send, ChevronLeft, ChevronRight } from 'lucide-react'
 import Threads from './Threads'
+import HeroProfileAndPreview from './HeroProfileAndPreview'
 
 const categories = [
   {
@@ -104,25 +106,20 @@ export default function Hero() {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center gap-16 pt-8 pb-24">
 
-        {/* Left Div — Text + Category Card */}
-        <motion.div
-          className="flex-1 text-center md:text-left self-start pt-4"
-          initial={{ opacity: 0, x: -40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.7 }}
-        >
-          <p className="text-neutral-500 font-medium mb-3 tracking-widest uppercase text-xs">
+      <div className="relative z-10 max-w-5xl w-full mx-auto flex flex-col items-center gap-8 pt-8 pb-24">
+        {/* Text and Buttons Top */}
+        <div className="w-full flex flex-col items-center">
+          <p className="text-neutral-500 font-medium mb-3 tracking-widest uppercase text-xs text-center">
             Welcome to my portfolio
           </p>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-3 leading-tight">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-3 leading-tight text-center">
             Benson Ricohermoso
           </h1>
-          <p className="text-lg text-neutral-400 mb-8 font-light">
+          <p className="text-lg text-neutral-400 mb-8 font-light text-center">
             Software Engineer & AI Specialist
           </p>
-          <div className="flex flex-wrap gap-3 justify-center md:justify-start mb-8">
+          <div className="flex flex-wrap gap-3 justify-center mb-8">
             <a
               href="#contact"
               className="inline-flex items-center gap-2 bg-white hover:bg-neutral-200 text-black text-sm font-semibold px-5 py-2.5 rounded-full transition-colors duration-200"
@@ -138,63 +135,9 @@ export default function Hero() {
               Request CV
             </button>
           </div>
-
-          {/* Category Card */}
-          <div className="w-[calc(100%-120px)] bg-[#111111] border border-[#222222] rounded-2xl overflow-hidden mt-12">
-            <div className="flex items-center justify-between px-3 py-1.5">
-              <span className="text-white text-xs font-semibold tracking-wide">
-                {categories[catIndex].label}
-              </span>
-            </div>
-            <div className="relative h-24 bg-[#0a0a0a] overflow-hidden flex items-center justify-center">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={catIndex}
-                  className="absolute inset-0 flex items-center justify-center"
-                  initial={{ opacity: 0, x: 30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -30 }}
-                  transition={{ duration: 0.25 }}
-                >
-                  <img
-                    src={categories[catIndex].image}
-                    alt={`${categories[catIndex].label} Preview`}
-                    className="h-20 object-contain transition-transform duration-300 cursor-zoom-in hover:scale-110"
-                    onClick={() => setShowImageModal(true)}
-                  />
-                </motion.div>
-              </AnimatePresence>
-            </div>
-            <div className="flex items-center justify-between px-3 py-0.5">
-              <button onClick={prev} className="text-neutral-400 hover:text-white transition-colors">
-                <ChevronLeft size={18} />
-              </button>
-              <div className="flex gap-1.5">
-                {categories.map((_, i) => (
-                  <span
-                    key={i}
-                    className={`w-1.5 h-1.5 rounded-full transition-colors duration-200 ${i === catIndex ? 'bg-white' : 'bg-white/25'}`}
-                  />
-                ))}
-              </div>
-              <button onClick={next} className="text-neutral-400 hover:text-white transition-colors">
-                <ChevronRight size={18} />
-              </button>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Right Div — Photo */}
-        <motion.div
-          className="flex-shrink-0 self-start -mt-9"
-          initial={{ opacity: 0, scale: 0.85 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7 }}
-        >
-          <div className="w-56 h-96 md:w-80 md:h-[28rem] rounded-2xl border-4 border-white glow-border overflow-hidden">
-            <img src="/images/profile.jpg" alt="Benson Ricohermoso" className="w-full h-full object-cover" />
-          </div>
-        </motion.div>
+        </div>
+        {/* Profile Card and Preview Cards beside each other */}
+        <HeroProfileAndPreview />
 
       </div>
 
@@ -202,16 +145,17 @@ export default function Hero() {
       <AnimatePresence>
         {showImageModal && (
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 px-2 sm:px-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setShowImageModal(false)}
+            style={{ touchAction: 'manipulation' }}
           >
             <img
               src={categories[catIndex].image}
               alt={`${categories[catIndex].label} Full View`}
-              className="max-w-full max-h-full rounded-2xl shadow-2xl border-4 border-white"
+              className="w-full h-auto max-h-[90vh] sm:max-w-xl md:max-w-2xl lg:max-w-3xl rounded-2xl shadow-2xl border-4 border-white object-contain"
               style={{ cursor: 'zoom-out' }}
             />
           </motion.div>
