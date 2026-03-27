@@ -1,6 +1,6 @@
 // api/chat.js
 export const config = {
-  runtime: 'edge', // Using Edge runtime is faster and has built-in fetch support
+  runtime: 'edge',
 };
 
 export default async function handler(req) {
@@ -10,35 +10,27 @@ export default async function handler(req) {
 
   try {
     const { messages } = await req.json();
-
-    // Debug: Log environment and request
-    console.log('GROQ_API_KEY present:', !!process.env.GROQ_API_KEY);
-    console.log('Request messages:', messages);
-
-    // Check for the key (Make sure it's named GROQ_API_KEY in Vercel)
-    const apiKey = process.env.GROQ_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
 
     if (!apiKey) {
-      console.error('API key not configured');
-      return new Response(JSON.stringify({ error: 'API key not configured' }), { status: 500 });
+      return new Response(JSON.stringify({ error: 'Gemini API key not configured' }), { status: 500 });
     }
 
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    // Gemini expects a different payload structure
+    const prompt = messages.map(m => `${m.role}: ${m.content}`).join('\n');
+
+    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=' + apiKey, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'llama3-70b-8192',
-        messages,
-        max_tokens: 500,
+        contents: [{ parts: [{ text: prompt }] }],
       }),
     });
 
     const data = await response.json();
-    console.log('Groq API response:', data);
-    const text = data.choices?.[0]?.message?.content || 'No response from AI';
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response from Gemini AI';
 
     return new Response(JSON.stringify({ text, debug: data }), {
       status: 200,
