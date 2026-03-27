@@ -4,46 +4,76 @@ import { ChevronLeft, ChevronRight, X, ExternalLink } from 'lucide-react'
 
 const projects = [
   {
-    title: 'AI Chat Assistant',
-    description: 'A conversational AI assistant powered by transformer models with real-time streaming responses. Built with a FastAPI backend and React frontend, supporting multi-turn conversations and context retention.',
-    tags: ['Python', 'PyTorch', 'React', 'FastAPI'],
-    images: [null, null, null],
-    siteUrl: 'https://your-site-url.com',
+    title: 'IThink',
+    date: '2026',
+    siteUrl: 'https://i-think-roan.vercel.app/',
+    description: 'A web-based platform for collaborative thinking, drafting, and chat-driven idea development. Users can create drafts, participate in discussions, and leverage AI-powered credibility checking to enhance the quality of their contributions. The platform features user authentication, dashboards, and interactive tools for organizing and refining ideas in a visually engaging environment.',
+    tags: ['React', 'Vite', 'Node.js', 'Express', 'Python', 'AI'],
+    images: [
+      '/images/project-cards/Ithink-1.png',
+      '/images/project-cards/Ithink-2.png',
+      '/images/project-cards/Ithink-3.png',
+    ],
   },
   {
-    title: 'E-Commerce Platform',
-    description: 'Full-stack e-commerce solution with cart management, payments, and admin dashboard. Integrated Stripe for secure payments and built a real-time inventory management system.',
-    tags: ['Next.js', 'Node.js', 'PostgreSQL', 'Stripe'],
-    images: [null, null, null],
-    siteUrl: 'https://your-site-url.com',
+    title: 'XenorAI',
+    date: 'March 2026',
+    siteUrl: 'https://xenor-ai.vercel.app/',
+    description: 'A modern full-stack AI chatbot system with a responsive Next.js frontend and FastAPI backend. It features real-time chat with typing indicators, GPT-powered intelligent responses, conversation history, error handling, and a clean RESTful API with Swagger documentation.',
+    tags: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'FastAPI', 'Python', 'OpenAI', 'Uvicorn', 'Axios'],
+    images: [
+      '/images/project-cards/xernor-1.png',
+      '/images/project-cards/xenor-2.png',
+      '/images/project-cards/xenor-3.png',
+    ],
   },
   {
-    title: 'Image Classifier',
-    description: 'Deep learning model for multi-class image classification with 95%+ accuracy on benchmark datasets. Trained on custom datasets using transfer learning with ResNet architecture.',
-    tags: ['Python', 'TensorFlow', 'OpenCV', 'Flask'],
-    images: [null, null, null],
-    siteUrl: 'https://your-site-url.com',
+    title: 'Financial Management Chatbot (FinBot AI)',
+    date: 'December 2025',
+    siteUrl: 'https://financial-management-chatbot.vercel.app/',
+    description: 'A Flask-based personal finance chatbot that processes natural language inputs to structure transaction data. It features interactive dashboards, time-based financial reports, and supports budgeting and expense tracking for improved financial awareness.',
+    tags: ['Python', 'Flask', 'Chart.js', 'HTML5', 'CSS3', 'JavaScript', 'SQLite3'],
+    images: [
+      '/images/project-cards/finbot-1.png',
+      '/images/project-cards/finbot-2.png',
+      '/images/project-cards/finbot-3.png',
+    ],
   },
   {
-    title: 'Portfolio Dashboard',
-    description: 'Real-time analytics dashboard for tracking stock portfolios with interactive charts. Features live data feeds, portfolio performance metrics, and customizable watchlists.',
-    tags: ['React', 'TypeScript', 'D3.js', 'REST API'],
-    images: [null, null, null],
-    siteUrl: 'https://your-site-url.com',
+    title: 'Clinic Management System',
+    date: 'January 2026',
+    siteUrl: '',
+    description: 'A comprehensive Flask-based clinical management system for patient tracking, vital signs monitoring, and appointment scheduling. It includes dashboard analytics, secure user authentication, and role-based access for healthcare staff.',
+    tags: ['Python', 'Flask', 'SQLite3', 'HTML5', 'Tailwind CSS', 'JavaScript', 'Font Awesome', 'Werkzeug'],
+    images: [
+      '/images/project-cards/care-1.png',
+      '/images/project-cards/care-2.png',
+      '/images/project-cards/care-3.png',
+    ],
   },
   {
-    title: 'Task Manager App',
-    description: 'Collaborative task management tool with drag-and-drop boards and real-time sync. Supports team workspaces, task assignments, deadlines, and progress tracking.',
-    tags: ['React', 'Express', 'MongoDB', 'Socket.io'],
-    images: [null, null, null],
-    siteUrl: 'https://your-site-url.com',
+    title: 'Grocery Store Management System',
+    date: 'March 2026',
+    siteUrl: '',
+    description: 'A comprehensive Python-based grocery store management system with inventory tracking, point of sale (POS), sales reporting, and user management.',
+    tags: ['Python', 'Tkinter', 'MySQL', 'crypts', 'ReportLab', 'OpenPyXL'],
+    images: [
+      '/images/project-cards/grocery-1.png',
+      '/images/project-cards/grocery-2.png',
+      '/images/project-cards/grocery-3.png',
+    ],
   },
   {
-    title: 'NLP Sentiment Analyzer',
-    description: 'Sentiment analysis pipeline for social media data using fine-tuned BERT models. Processes thousands of posts per minute with a REST API for easy integration.',
-    tags: ['Python', 'HuggingFace', 'Scikit-learn', 'Pandas'],
-    images: [null, null, null],
-    siteUrl: 'https://your-site-url.com',
+    title: 'ForceQuest System',
+    date: 'March 2026',
+    siteUrl: '',
+    description: 'An interactive physics simulator designed to visualize Work, Energy, and Power (W.E.P.) concepts. It allows users to manipulate parameters such as force, distance, mass, angle, and friction, then instantly see results through real-time animations, energy graphs, and detailed calculations. The system also includes an integrated physics quiz to reinforce learning.',
+    tags: ['Python', 'Tkinter', 'NumPy', 'Matplotlib'],
+    images: [
+      '/images/project-cards/fquest-1.png',
+      '/images/project-cards/fquest-2.png',
+      '/images/project-cards/fquest-3.png',
+    ],
   },
 ]
 
@@ -190,8 +220,12 @@ export default function Projects() {
               onClick={() => setSelectedIndex(i)}
               className="bg-dark-card border border-[#222222] rounded-2xl overflow-hidden hover:border-white/30 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
             >
-              <div className="h-44 bg-[#0a0a0a] flex items-center justify-center">
-                <span className="text-neutral-600 text-sm">Project Image</span>
+              <div className="h-44 bg-[#0a0a0a] flex items-center justify-center overflow-hidden">
+                {project.images[0] ? (
+                  <img src={project.images[0]} alt={project.title + ' preview'} className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-neutral-600 text-sm">Project Image</span>
+                )}
               </div>
               <div className="p-5">
                 <h3 className="text-white font-semibold text-lg mb-2">{project.title}</h3>

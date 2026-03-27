@@ -4,9 +4,18 @@ import { Mail, FileText, X, Send, ChevronLeft, ChevronRight } from 'lucide-react
 import Threads from './Threads'
 
 const categories = [
-  { label: 'Website' },
-  { label: 'Software' },
-  { label: 'Webapp' },
+  {
+    label: 'Website',
+    image: '/images/hero-cards/web-preview.png',
+  },
+  {
+    label: 'Software',
+    image: '/images/hero-cards/software-preview.png',
+  },
+  {
+    label: 'Webapp',
+    image: '/images/hero-cards/webapp-preview.png',
+  },
 ]
 
 function CVModal({ onClose }) {
@@ -70,9 +79,11 @@ function CVModal({ onClose }) {
   )
 }
 
+
 export default function Hero() {
   const [showModal, setShowModal] = useState(false)
   const [catIndex, setCatIndex] = useState(0)
+  const [showImageModal, setShowImageModal] = useState(false)
 
   const prev = () => setCatIndex(i => (i - 1 + categories.length) % categories.length)
   const next = () => setCatIndex(i => (i + 1) % categories.length)
@@ -145,7 +156,12 @@ export default function Hero() {
                   exit={{ opacity: 0, x: -30 }}
                   transition={{ duration: 0.25 }}
                 >
-                  <span className="text-neutral-600 text-sm">{categories[catIndex].label} Preview</span>
+                  <img
+                    src={categories[catIndex].image}
+                    alt={`${categories[catIndex].label} Preview`}
+                    className="h-20 object-contain transition-transform duration-300 cursor-zoom-in hover:scale-110"
+                    onClick={() => setShowImageModal(true)}
+                  />
                 </motion.div>
               </AnimatePresence>
             </div>
@@ -181,6 +197,26 @@ export default function Hero() {
         </motion.div>
 
       </div>
+
+      {/* Category Image Modal */}
+      <AnimatePresence>
+        {showImageModal && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowImageModal(false)}
+          >
+            <img
+              src={categories[catIndex].image}
+              alt={`${categories[catIndex].label} Full View`}
+              className="max-w-full max-h-full rounded-2xl shadow-2xl border-4 border-white"
+              style={{ cursor: 'zoom-out' }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* CV Request Modal */}
       <AnimatePresence>
