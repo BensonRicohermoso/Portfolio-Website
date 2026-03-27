@@ -42,7 +42,7 @@ export default function ChatBot() {
 
   const sendMessage = async () => {
     if (!input.trim() || loading) return;
-    
+
     const userText = input.trim();
     setInput('');
     setMessages(prev => [...prev, { role: 'user', text: userText }]);
@@ -69,7 +69,7 @@ export default function ChatBot() {
       // Ensure we extract the 'text' property returned by our api/chat.js
       const botResponse = data.text || "I'm sorry, I'm having trouble connecting right now.";
       setMessages(prev => [...prev, { role: 'bot', text: botResponse }]);
-      
+
     } catch (err) {
       console.error('Frontend Chat Error:', err);
       setMessages(prev => [...prev, { role: 'bot', text: "Sorry, I couldn't process that. Please check your connection or try again later." }]);
@@ -80,8 +80,8 @@ export default function ChatBot() {
 
   const handleKey = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      sendMessage()
+      e.preventDefault();
+      sendMessage();
     }
   }
 
@@ -96,9 +96,27 @@ export default function ChatBot() {
       >
         <AnimatePresence mode="wait">
           {open
-            ? <motion.div key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}><X size={22} /></motion.div>
-            : <motion.div key="msg" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}><MessageCircle size={22} /></motion.div>
-          }
+            ? (
+              <motion.div
+                key="x"
+                initial={{ rotate: -90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: 90, opacity: 0 }}
+                transition={{ duration: 0.15 }}
+              >
+                <X size={22} />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="msg"
+                initial={{ rotate: 90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: -90, opacity: 0 }}
+                transition={{ duration: 0.15 }}
+              >
+                <MessageCircle size={22} />
+              </motion.div>
+            )}
         </AnimatePresence>
       </motion.button>
 
@@ -125,27 +143,35 @@ export default function ChatBot() {
             </div>
 
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 scrollbar-hide">
+            <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
               {messages.map((msg, i) => (
-                <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div
+                  key={`msg-${i}`}
+                  className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
                   <div
-                    className={`max-w-[85%] px-4 py-2 rounded-2xl text-sm leading-relaxed ${
-                      msg.role === 'user'
-                        ? 'bg-white text-black rounded-br-none shadow-sm'
-                        : 'bg-[#1a1a1a] text-neutral-300 border border-[#2a2a2a] rounded-bl-none'
+                    className={`max-w-[85%] px-4 py-2 rounded-2xl text-sm ${
+                      msg.role === 'user' ? 'bg-white text-black' : 'bg-[#1a1a1a] text-neutral-300'
                     }`}
                   >
                     {msg.text}
                   </div>
                 </div>
               ))}
-              
+
+              {/* Move the loading indicator inside the same flow */}
               {loading && (
-                <div className="flex justify-start">
-                  <div className="bg-[#1a1a1a] border border-[#2a2a2a] px-4 py-3 rounded-2xl rounded-bl-none flex gap-1.5 items-center shadow-sm">
-                    <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                <div key="loading-indicator" className="flex justify-start">
+                  <div className="bg-[#1a1a1a] px-4 py-3 rounded-2xl flex gap-1.5">
+                    <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce" />
+                    <span
+                      className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce"
+                      style={{ animationDelay: '150ms' }}
+                    />
+                    <span
+                      className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce"
+                      style={{ animationDelay: '300ms' }}
+                    />
                   </div>
                 </div>
               )}
@@ -174,5 +200,5 @@ export default function ChatBot() {
         )}
       </AnimatePresence>
     </>
-  )
-}
+  );
+} 
