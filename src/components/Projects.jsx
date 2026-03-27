@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, ChevronRight, X } from 'lucide-react'
+import { ChevronLeft, ChevronRight, X, ExternalLink } from 'lucide-react'
 
 const projects = [
   {
@@ -8,36 +8,42 @@ const projects = [
     description: 'A conversational AI assistant powered by transformer models with real-time streaming responses. Built with a FastAPI backend and React frontend, supporting multi-turn conversations and context retention.',
     tags: ['Python', 'PyTorch', 'React', 'FastAPI'],
     images: [null, null, null],
+    siteUrl: 'https://your-site-url.com',
   },
   {
     title: 'E-Commerce Platform',
     description: 'Full-stack e-commerce solution with cart management, payments, and admin dashboard. Integrated Stripe for secure payments and built a real-time inventory management system.',
     tags: ['Next.js', 'Node.js', 'PostgreSQL', 'Stripe'],
     images: [null, null, null],
+    siteUrl: 'https://your-site-url.com',
   },
   {
     title: 'Image Classifier',
     description: 'Deep learning model for multi-class image classification with 95%+ accuracy on benchmark datasets. Trained on custom datasets using transfer learning with ResNet architecture.',
     tags: ['Python', 'TensorFlow', 'OpenCV', 'Flask'],
     images: [null, null, null],
+    siteUrl: 'https://your-site-url.com',
   },
   {
     title: 'Portfolio Dashboard',
     description: 'Real-time analytics dashboard for tracking stock portfolios with interactive charts. Features live data feeds, portfolio performance metrics, and customizable watchlists.',
     tags: ['React', 'TypeScript', 'D3.js', 'REST API'],
     images: [null, null, null],
+    siteUrl: 'https://your-site-url.com',
   },
   {
     title: 'Task Manager App',
     description: 'Collaborative task management tool with drag-and-drop boards and real-time sync. Supports team workspaces, task assignments, deadlines, and progress tracking.',
     tags: ['React', 'Express', 'MongoDB', 'Socket.io'],
     images: [null, null, null],
+    siteUrl: 'https://your-site-url.com',
   },
   {
     title: 'NLP Sentiment Analyzer',
     description: 'Sentiment analysis pipeline for social media data using fine-tuned BERT models. Processes thousands of posts per minute with a REST API for easy integration.',
     tags: ['Python', 'HuggingFace', 'Scikit-learn', 'Pandas'],
     images: [null, null, null],
+    siteUrl: 'https://your-site-url.com',
   },
 ]
 
@@ -61,7 +67,7 @@ function ProjectModal({ index, onClose }) {
       {/* Modal */}
       <motion.div
         key={index}
-        className="relative w-full max-w-lg bg-[#111111] border border-[#222222] rounded-2xl overflow-hidden shadow-2xl"
+        className="relative w-full max-w-2xl bg-[#111111] border border-[#222222] rounded-2xl overflow-hidden shadow-2xl mx-4"
         initial={{ scale: 0.85, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.85, opacity: 0 }}
@@ -122,8 +128,20 @@ function ProjectModal({ index, onClose }) {
         </div>
 
         {/* Content */}
-        <div className="p-6">
-          <h3 className="text-white font-semibold text-xl mb-3">{project.title}</h3>
+        <div className="p-8">
+          <div className="flex items-start justify-between gap-4 mb-3">
+            <h3 className="text-white font-semibold text-xl">{project.title}</h3>
+            <a
+              href={project.siteUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={e => e.stopPropagation()}
+              className="inline-flex items-center gap-1.5 bg-white hover:bg-neutral-200 text-black text-xs font-semibold px-3 py-1.5 rounded-full transition-colors duration-200 whitespace-nowrap flex-shrink-0"
+            >
+              <ExternalLink size={12} />
+              Visit Site
+            </a>
+          </div>
           <p className="text-neutral-400 text-sm leading-relaxed mb-5">{project.description}</p>
           <div>
             <p className="text-xs text-neutral-500 uppercase tracking-widest mb-2">Tech Stack</p>

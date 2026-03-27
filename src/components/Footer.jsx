@@ -15,8 +15,8 @@ const contactInfo = [
 ]
 
 const socials = [
-  { icon: <Linkedin size={18} />, href: 'https://linkedin.com/in/your-profile' },
-  { icon: <Github size={18} />, href: 'https://github.com/your-username' },
+  { icon: <Linkedin size={15} />, label: 'LinkedIn', href: 'https://linkedin.com/in/your-profile' },
+  { icon: <Github size={15} />, label: 'GitHub', href: 'https://github.com/your-username' },
 ]
 
 export default function Footer() {
@@ -30,7 +30,7 @@ export default function Footer() {
   }
 
   return (
-    <footer id="contact" className="py-20 px-6 border-t border-[#222222]">
+    <footer id="contact" className="pt-20 pb-32 px-6 border-t border-[#222222] mb-0">
       <div className="max-w-6xl mx-auto">
 
         {/* Heading */}
@@ -81,9 +81,11 @@ export default function Footer() {
                     href={s.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-9 h-9 rounded-full bg-white/10 border border-white/10 hover:border-white/30 hover:bg-white/20 flex items-center justify-center text-white transition-all duration-200"
+                    className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/10 hover:border-white/30 text-white text-xs font-medium px-4 py-2 transition-all duration-200"
+                    style={{ borderRadius: '50px' }}
                   >
                     {s.icon}
+                    {s.label}
                   </a>
                 ))}
               </div>
@@ -183,9 +185,6 @@ export default function Footer() {
 
         </div>
 
-        <p className="text-neutral-700 text-xs text-center mt-12">
-          © {new Date().getFullYear()} Benson Ricohermoso. Built with React & Tailwind CSS.
-        </p>
 
       </div>
     </footer>

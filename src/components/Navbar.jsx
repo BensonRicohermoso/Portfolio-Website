@@ -5,36 +5,42 @@ import { RiAwardLine } from 'react-icons/ri'
 import { BiEnvelope } from 'react-icons/bi'
 import Dock from './Dock'
 
+const smoothScroll = (id) => {
+  const el = document.getElementById(id)
+  if (!el) return
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
 const items = [
   {
     icon: <AiOutlineHome size={20} className="text-white" />,
     label: 'Home',
-    onClick: () => document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' }),
+    onClick: () => smoothScroll('home'),
   },
   {
     icon: <AiOutlineUser size={20} className="text-white" />,
     label: 'About',
-    onClick: () => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' }),
+    onClick: () => smoothScroll('about'),
   },
   {
     icon: <MdOutlineStackedBarChart size={20} className="text-white" />,
     label: 'Tech Stack',
-    onClick: () => document.getElementById('tech-stack')?.scrollIntoView({ behavior: 'smooth' }),
+    onClick: () => smoothScroll('tech-stack'),
   },
   {
     icon: <VscProject size={20} className="text-white" />,
     label: 'Projects',
-    onClick: () => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' }),
+    onClick: () => smoothScroll('projects'),
   },
   {
     icon: <RiAwardLine size={20} className="text-white" />,
     label: 'Certifications',
-    onClick: () => document.getElementById('certifications')?.scrollIntoView({ behavior: 'smooth' }),
+    onClick: () => smoothScroll('certifications'),
   },
   {
     icon: <BiEnvelope size={20} className="text-white" />,
     label: 'Contact',
-    onClick: () => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }),
+    onClick: () => smoothScroll('contact'),
   },
 ]
 

@@ -121,7 +121,7 @@ export default function Hero() {
             </a>
             <button
               onClick={() => setShowModal(true)}
-              className="inline-flex items-center gap-2 bg-transparent hover:bg-white/10 text-white text-sm font-semibold px-5 py-2.5 rounded-full border border-white/30 hover:border-white/60 transition-colors duration-200"
+              className="inline-flex items-center gap-2 backdrop-blur-md bg-white/10 hover:bg-white/20 text-white text-sm font-semibold px-5 py-2.5 rounded-full border border-white/20 hover:border-white/40 transition-colors duration-200"
             >
               <FileText size={15} />
               Request CV
