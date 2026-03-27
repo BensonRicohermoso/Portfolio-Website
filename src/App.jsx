@@ -5,6 +5,7 @@ import TechStack from './components/TechStack'
 import Projects from './components/Projects'
 import Certifications from './components/Certifications'
 import Footer from './components/Footer'
+import ChatBot from './components/ChatBot'
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
       <Projects />
       <Certifications />
       <Footer />
+      <ChatBot />
     </div>
   )
 }
