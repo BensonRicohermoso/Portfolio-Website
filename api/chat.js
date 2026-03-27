@@ -10,11 +10,16 @@ export default async function handler(req) {
 
   try {
     const { messages } = await req.json();
-    
+
+    // Debug: Log environment and request
+    console.log('GROQ_API_KEY present:', !!process.env.GROQ_API_KEY);
+    console.log('Request messages:', messages);
+
     // Check for the key (Make sure it's named GROQ_API_KEY in Vercel)
     const apiKey = process.env.GROQ_API_KEY;
 
     if (!apiKey) {
+      console.error('API key not configured');
       return new Response(JSON.stringify({ error: 'API key not configured' }), { status: 500 });
     }
 
@@ -32,9 +37,10 @@ export default async function handler(req) {
     });
 
     const data = await response.json();
+    console.log('Groq API response:', data);
     const text = data.choices?.[0]?.message?.content || 'No response from AI';
 
-    return new Response(JSON.stringify({ text }), {
+    return new Response(JSON.stringify({ text, debug: data }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
