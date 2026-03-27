@@ -176,7 +176,7 @@ export default function Hero() {
           transition={{ duration: 0.7 }}
         >
           <div className="w-56 h-96 md:w-80 md:h-[28rem] rounded-2xl border-4 border-white glow-border overflow-hidden">
-            <img src="public/images/picture.jpg" alt="Benson Ricohermoso" className="w-full h-full object-cover" />
+            <img src="/images/picture.jpg" alt="Benson Ricohermoso" className="w-full h-full object-cover" />
           </div>
         </motion.div>
 
