@@ -23,7 +23,7 @@ uniform vec2 uMouse;
 
 #define PI 3.1415926538
 
-const int u_line_count = 40;
+const int u_line_count = 24;
 const float u_line_width = 7.0;
 const float u_line_blur = 10.0;
 
@@ -121,6 +121,7 @@ void main() {
 const Threads = ({ color = [1, 1, 1], amplitude = 1, distance = 0, enableMouseInteraction = false, ...rest }) => {
   const containerRef = useRef(null);
   const animationFrameId = useRef();
+  const isVisible = useRef(true);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -190,12 +191,19 @@ const Threads = ({ color = [1, 1, 1], amplitude = 1, distance = 0, enableMouseIn
         program.uniforms.uMouse.value[1] = 0.5;
       }
       program.uniforms.iTime.value = t * 0.001;
-      renderer.render({ scene: mesh });
+      if (isVisible.current) renderer.render({ scene: mesh });
       animationFrameId.current = requestAnimationFrame(update);
     }
+    const observer = new IntersectionObserver(
+      ([entry]) => { isVisible.current = entry.isIntersecting; },
+      { threshold: 0 }
+    );
+    observer.observe(container);
+
     animationFrameId.current = requestAnimationFrame(update);
 
     return () => {
+      observer.disconnect();
       if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
       window.removeEventListener('resize', resize);
       if (enableMouseInteraction) {

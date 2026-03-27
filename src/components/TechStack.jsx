@@ -26,7 +26,7 @@ export default function TechStack() {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
           transition={{ duration: 0.6 }}
           className="mb-12"
         >
@@ -40,7 +40,7 @@ export default function TechStack() {
               key={cat.title}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ duration: 0.5, delay: i * 0.15 }}
               className="bg-dark-card border border-[#222222] rounded-2xl p-6 hover:border-white/30 transition-colors duration-300"
             >
