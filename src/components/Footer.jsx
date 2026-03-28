@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Github, Linkedin, Mail, Phone, MapPin, Send } from 'lucide-react'
+import { Github, Linkedin, Mail, Phone, MapPin, Send, CheckCircle2, Loader2 } from 'lucide-react'
 
 const stats = [
   { value: '10+', label: 'Projects' },
@@ -21,12 +21,31 @@ const socials = [
 
 export default function Footer() {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
+  const [status, setStatus] = useState('idle') // 'idle' | 'loading' | 'success' | 'error'
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    const body = encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`)
-    const subject = encodeURIComponent(form.subject || 'Message from Portfolio')
-    window.location.href = `mailto:bensonricohermoso@gmail.com?subject=${subject}&body=${body}`
+    setStatus('loading')
+
+    try {
+      const response = await fetch("https://formspree.io/f/xgopoqyo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      if (response.ok) {
+        setStatus('success')
+        setForm({ name: '', email: '', subject: '', message: '' })
+        // Reset to idle after 5 seconds
+        setTimeout(() => setStatus('idle'), 5000)
+      } else {
+        setStatus('error')
+      }
+    } catch (error) {
+      console.error("Form error:", error)
+      setStatus('error')
+    }
   }
 
   return (
@@ -90,6 +109,7 @@ export default function Footer() {
                 ))}
               </div>
             </motion.div>
+
             {/* Stats Card */}
             <motion.div
               className="bg-[#111111] border border-[#222222] rounded-2xl p-6"
@@ -120,7 +140,6 @@ export default function Footer() {
           >
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 h-full">
 
-              {/* Name + Email */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="text-xs text-neutral-500 mb-1 block">Your Name</label>
@@ -146,7 +165,6 @@ export default function Footer() {
                 </div>
               </div>
 
-              {/* Subject */}
               <div>
                 <label className="text-xs text-neutral-500 mb-1 block">Subject</label>
                 <input
@@ -158,7 +176,6 @@ export default function Footer() {
                 />
               </div>
 
-              {/* Message */}
               <div className="flex-1">
                 <label className="text-xs text-neutral-500 mb-1 block">Message</label>
                 <textarea
@@ -171,21 +188,38 @@ export default function Footer() {
                 />
               </div>
 
-              {/* Submit */}
               <button
                 type="submit"
-                className="w-full inline-flex items-center justify-center gap-2 bg-white hover:bg-neutral-200 text-black text-sm font-semibold px-5 py-3 rounded-full transition-colors duration-200"
+                disabled={status === 'loading'}
+                className={`w-full inline-flex items-center justify-center gap-2 text-sm font-semibold px-5 py-3 rounded-full transition-all duration-200 
+                  ${status === 'success' ? 'bg-green-500 text-white' : 'bg-white hover:bg-neutral-200 text-black'} 
+                  ${status === 'loading' ? 'opacity-70 cursor-not-allowed' : ''}`}
               >
-                <Send size={15} />
-                Send Message
+                {status === 'loading' ? (
+                  <>
+                    <Loader2 size={15} className="animate-spin" />
+                    Sending...
+                  </>
+                ) : status === 'success' ? (
+                  <>
+                    <CheckCircle2 size={15} />
+                    Message Sent!
+                  </>
+                ) : (
+                  <>
+                    <Send size={15} />
+                    Send Message
+                  </>
+                )}
               </button>
+              
+              {status === 'error' && (
+                <p className="text-red-500 text-xs text-center mt-2">Something went wrong. Please try again.</p>
+              )}
 
             </form>
           </motion.div>
-
         </div>
-
-
       </div>
     </footer>
   )
