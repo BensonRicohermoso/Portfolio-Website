@@ -33,14 +33,11 @@ export default function ChatBot() {
     if (!input.trim() || loading) return;
 
     const userText = input.trim();
-    
-    // Update UI with user message and start loading
     setMessages(prev => [...prev, { role: 'user', text: userText }]);
     setInput('');
     setLoading(true);
 
     try {
-      // Build the message history for the backend
       const history = [
         { role: 'system', content: SYSTEM_PROMPT },
         ...messages.map(m => ({
@@ -57,18 +54,12 @@ export default function ChatBot() {
       });
 
       const data = await response.json();
+      if (!response.ok) throw new Error(data.error || `Error: ${response.status}`);
 
-      if (!response.ok) {
-        throw new Error(data.error || `Error: ${response.status}`);
-      }
-
-      // Add Bot response to UI
-      const botResponse = data.text || "I'm sorry, I couldn't get a response. Try again later.";
-      setMessages(prev => [...prev, { role: 'bot', text: botResponse }]);
-
+      setMessages(prev => [...prev, { role: 'bot', text: data.text || "I'm sorry, I couldn't get a response." }]);
     } catch (err) {
-      console.error("Frontend Chat Error:", err);
-      setMessages(prev => [...prev, { role: 'bot', text: "Sorry, I'm having trouble connecting to the server. Please try again later." }]);
+      console.error("Chat Error:", err);
+      setMessages(prev => [...prev, { role: 'bot', text: "Sorry, I'm having trouble connecting. Please try again." }]);
     } finally {
       setLoading(false);
     }
@@ -83,29 +74,45 @@ export default function ChatBot() {
 
   return (
     <>
-      {/* Floating Button (hidden on mobile when open) */}
+      {/* Floating Button and Tooltip */}
       <AnimatePresence>
         {!open && (
-          <motion.button
-            onClick={() => setOpen(o => !o)}
-            className="fixed bottom-6 right-6 z-[100] w-14 h-14 rounded-full bg-white text-black flex items-center justify-center shadow-lg shadow-white/10 hover:bg-neutral-200 transition-colors duration-200 sm:bottom-24"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            aria-label="Open chat bot"
-          >
+          <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end gap-3 sm:bottom-10">
+            
+            {/* Desktop Tooltip */}
             <motion.div
-              key="msg"
-              initial={{ rotate: 90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: -90, opacity: 0 }}
-              transition={{ duration: 0.15 }}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 1 }}
+              className="bg-white text-black px-4 py-2 rounded-2xl rounded-br-none shadow-xl border border-neutral-200 mb-2 hidden sm:block relative"
             >
-              <MessageCircle size={22} />
+              <p className="text-[11px] font-bold uppercase tracking-tight">
+                Assistant Online ✨
+              </p>
             </motion.div>
-          </motion.button>
+
+            {/* The Main Button with Green Glow */}
+            <motion.button
+              onClick={() => setOpen(true)}
+              className="relative w-14 h-14 rounded-full bg-white text-black flex items-center justify-center shadow-[0_0_20px_rgba(34,197,94,0.3)] group transition-shadow duration-500 hover:shadow-[0_0_30px_rgba(34,197,94,0.5)]"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+            >
+              {/* Pulsing Green Halo */}
+              <span className="absolute inset-0 rounded-full bg-green-500/20 animate-ping pointer-events-none" />
+              
+              <MessageCircle size={24} className="relative z-10" />
+              
+              {/* Small Green Status Dot */}
+              <span className="absolute -top-1 -right-1 flex h-4 w-4">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-4 w-4 bg-green-500 border-2 border-[#111]"></span>
+              </span>
+            </motion.button>
+          </div>
         )}
       </AnimatePresence>
 
@@ -113,88 +120,82 @@ export default function ChatBot() {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed z-[100] w-full bottom-0 left-0 right-0 h-[80vh] rounded-t-2xl border border-[#222222] bg-[#111111] shadow-2xl flex flex-col overflow-hidden sm:w-96 sm:h-[500px] sm:bottom-24 sm:right-6 sm:left-auto sm:rounded-2xl"
+            className="fixed z-[110] w-full bottom-0 left-0 right-0 h-[80vh] rounded-t-3xl border border-[#222222] bg-[#111111] shadow-2xl flex flex-col overflow-hidden sm:w-96 sm:h-[550px] sm:bottom-24 sm:right-6 sm:left-auto sm:rounded-2xl"
             initial={{ opacity: 0, y: '100%' }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: '100%' }}
-            transition={{ duration: 0.25 }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
             style={{ maxHeight: '100dvh' }}
           >
             {/* Header */}
-            <div className="flex items-center gap-3 px-4 py-3 border-b border-[#222222] bg-[#0d0d0d]">
-              <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
-                <Bot size={16} className="text-white" />
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[#222222] bg-[#0d0d0d]">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
+                  <Bot size={20} className="text-white" />
+                </div>
+                <div>
+                  <p className="text-white text-sm font-bold tracking-tight">Benson's AI</p>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_#22c55e]" />
+                    <p className="text-neutral-500 text-[10px] uppercase tracking-wider font-semibold">Online</p>
+                  </div>
+                </div>
               </div>
-              <div>
-                <p className="text-white text-sm font-semibold">Benson's Assistant</p>
-                <p className="text-neutral-500 text-xs">AI-Powered Portfolio Guide</p>
-              </div>
-              {/* Close button (mobile only) */}
-              <button
+              <button 
                 onClick={() => setOpen(false)}
-                className="ml-auto sm:hidden p-2 rounded-full hover:bg-neutral-800 transition-colors"
-                aria-label="Close chat bot"
+                className="p-2 hover:bg-white/5 rounded-full transition-colors text-neutral-400 hover:text-white"
               >
-                <X size={20} className="text-white" />
+                <X size={20} />
               </button>
             </div>
 
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-hide">
               {messages.map((msg, i) => (
-                <div
-                  key={`msg-${i}`}
-                  className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                >
-                  <div
-                    className={`max-w-[85%] px-4 py-2 rounded-2xl text-sm ${
-                      msg.role === 'user' ? 'bg-white text-black' : 'bg-[#1a1a1a] text-neutral-300'
-                    }`}
-                  >
+                <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
+                    msg.role === 'user' ? 'bg-white text-black font-medium' : 'bg-[#1a1a1a] text-neutral-200 border border-[#222222]'
+                  }`}>
                     {msg.text}
                   </div>
                 </div>
               ))}
-
               {loading && (
-                <div key="loading-indicator" className="flex justify-start">
-                  <div className="bg-[#1a1a1a] px-4 py-3 rounded-2xl flex gap-1.5">
-                    <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce" />
-                    <span
-                      className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce"
-                      style={{ animationDelay: '150ms' }}
-                    />
-                    <span
-                      className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce"
-                      style={{ animationDelay: '300ms' }}
-                    />
+                <div className="flex justify-start">
+                  <div className="bg-[#1a1a1a] px-4 py-3 rounded-2xl border border-[#222222]">
+                    <div className="flex gap-1.5">
+                      <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce" />
+                      <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce [animation-delay:0.2s]" />
+                      <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce [animation-delay:0.4s]" />
+                    </div>
                   </div>
                 </div>
               )}
               <div ref={bottomRef} />
             </div>
 
-            {/* Input Bar - sticky to bottom, safe-area-aware */}
-            <div className="px-3 py-3 border-t border-[#222222] flex gap-2 bg-[#0d0d0d] sticky bottom-0" style={{ paddingBottom: 'env(safe-area-inset-bottom,0px)' }}>
-              <input
-                type="text"
-                value={input}
-                onChange={e => setInput(e.target.value)}
-                onKeyDown={handleKey}
-                placeholder="Ask about Benson's projects..."
-                className="flex-1 bg-[#1a1a1a] border border-[#2a2a2a] rounded-full px-4 py-2 text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-white/20 transition-all"
-                style={{ minWidth: 0 }}
-                autoComplete="off"
-                inputMode="text"
-              />
-              <button
-                onClick={sendMessage}
-                disabled={!input.trim() || loading}
-                className="w-10 h-10 rounded-full bg-white hover:bg-neutral-200 text-black flex items-center justify-center transition-all duration-200 disabled:opacity-30 flex-shrink-0"
-                aria-label="Send message"
-              >
-                <Send size={16} />
-              </button>
+            {/* Input Bar */}
+            <div className="p-4 bg-[#0d0d0d] border-t border-[#222222]">
+              <div className="relative flex items-center max-w-full">
+                <input
+                  type="text"
+                  value={input}
+                  onChange={e => setInput(e.target.value)}
+                  onKeyDown={handleKey}
+                  placeholder="Ask about Benson's projects..."
+                  className="w-full bg-[#1a1a1a] border border-[#2a2a2a] rounded-full pl-5 pr-12 py-3.5 text-sm text-white focus:outline-none focus:border-white/30 transition-all placeholder:text-neutral-600"
+                  autoComplete="off"
+                />
+                <button
+                  onClick={sendMessage}
+                  disabled={!input.trim() || loading}
+                  className="absolute right-1.5 w-10 h-10 rounded-full bg-white text-black flex items-center justify-center disabled:opacity-20 hover:scale-105 active:scale-95 transition-all"
+                >
+                  <Send size={18} />
+                </button>
+              </div>
+              {/* Safe area spacing for mobile browsers */}
+              <div className="h-[env(safe-area-inset-bottom,0px)] sm:hidden" />
             </div>
           </motion.div>
         )}
