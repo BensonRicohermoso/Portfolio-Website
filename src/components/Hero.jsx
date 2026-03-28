@@ -184,14 +184,26 @@ export default function Hero() {
           {/* Live View Counter Badge */}
           {views !== null && (
             <motion.div 
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="flex items-center gap-2 mb-8 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="flex items-center gap-2.5 mb-8 px-4 py-2 rounded-full bg-white/[0.03] border border-white/10 backdrop-blur-md shadow-lg"
             >
-              <Eye size={12} className="text-neutral-500" />
-              <span className="text-[10px] text-neutral-400 font-mono tracking-tighter">
-                {views.toLocaleString()} VIEWS
-              </span>
+              <div className="relative flex h-2 w-2">
+                {/* Subtle pulse animation to show it's "Live" */}
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+              </div>
+    
+              <div className="flex items-center gap-1.5">
+                <Eye size={15} className="text-neutral-300" />
+                <span className="text-sm text-neutral-200 font-semibold tracking-wide">
+                  {views.toLocaleString()}
+                </span>
+                <span className="text-[10px] text-neutral-500 font-bold tracking-widest uppercase ml-0.5">
+                  Views
+                </span>
+              </div>
             </motion.div>
           )}
           
