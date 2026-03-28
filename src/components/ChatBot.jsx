@@ -83,25 +83,19 @@ export default function ChatBot() {
 
   return (
     <>
-      {/* Floating Button */}
-      <motion.button
-        onClick={() => setOpen(o => !o)}
-        className="fixed bottom-24 right-6 z-50 w-14 h-14 rounded-full bg-white text-black flex items-center justify-center shadow-lg shadow-white/10 hover:bg-neutral-200 transition-colors duration-200"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        <AnimatePresence mode="wait">
-          {open ? (
-            <motion.div
-              key="x"
-              initial={{ rotate: -90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: 90, opacity: 0 }}
-              transition={{ duration: 0.15 }}
-            >
-              <X size={22} />
-            </motion.div>
-          ) : (
+      {/* Floating Button (hidden on mobile when open) */}
+      <AnimatePresence>
+        {!open && (
+          <motion.button
+            onClick={() => setOpen(o => !o)}
+            className="fixed bottom-6 right-6 z-[100] w-14 h-14 rounded-full bg-white text-black flex items-center justify-center shadow-lg shadow-white/10 hover:bg-neutral-200 transition-colors duration-200 sm:bottom-24"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            aria-label="Open chat bot"
+          >
             <motion.div
               key="msg"
               initial={{ rotate: 90, opacity: 0 }}
@@ -111,20 +105,20 @@ export default function ChatBot() {
             >
               <MessageCircle size={22} />
             </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.button>
+          </motion.button>
+        )}
+      </AnimatePresence>
 
       {/* Chat Window */}
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed bottom-44 right-6 z-50 w-80 sm:w-96 bg-[#111111] border border-[#222222] rounded-2xl shadow-2xl flex flex-col overflow-hidden"
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            style={{ height: '460px' }}
+            className="fixed z-[100] w-full bottom-0 left-0 right-0 h-[80vh] rounded-t-2xl border border-[#222222] bg-[#111111] shadow-2xl flex flex-col overflow-hidden sm:w-96 sm:h-[500px] sm:bottom-24 sm:right-6 sm:left-auto sm:rounded-2xl"
+            initial={{ opacity: 0, y: '100%' }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: '100%' }}
+            transition={{ duration: 0.25 }}
+            style={{ maxHeight: '100dvh' }}
           >
             {/* Header */}
             <div className="flex items-center gap-3 px-4 py-3 border-b border-[#222222] bg-[#0d0d0d]">
@@ -135,6 +129,14 @@ export default function ChatBot() {
                 <p className="text-white text-sm font-semibold">Benson's Assistant</p>
                 <p className="text-neutral-500 text-xs">AI-Powered Portfolio Guide</p>
               </div>
+              {/* Close button (mobile only) */}
+              <button
+                onClick={() => setOpen(false)}
+                className="ml-auto sm:hidden p-2 rounded-full hover:bg-neutral-800 transition-colors"
+                aria-label="Close chat bot"
+              >
+                <X size={20} className="text-white" />
+              </button>
             </div>
 
             {/* Messages Area */}
@@ -172,8 +174,8 @@ export default function ChatBot() {
               <div ref={bottomRef} />
             </div>
 
-            {/* Input Bar */}
-            <div className="px-3 py-3 border-t border-[#222222] flex gap-2 bg-[#0d0d0d]">
+            {/* Input Bar - sticky to bottom, safe-area-aware */}
+            <div className="px-3 py-3 border-t border-[#222222] flex gap-2 bg-[#0d0d0d] sticky bottom-0" style={{ paddingBottom: 'env(safe-area-inset-bottom,0px)' }}>
               <input
                 type="text"
                 value={input}
@@ -181,11 +183,15 @@ export default function ChatBot() {
                 onKeyDown={handleKey}
                 placeholder="Ask about Benson's projects..."
                 className="flex-1 bg-[#1a1a1a] border border-[#2a2a2a] rounded-full px-4 py-2 text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-white/20 transition-all"
+                style={{ minWidth: 0 }}
+                autoComplete="off"
+                inputMode="text"
               />
               <button
                 onClick={sendMessage}
                 disabled={!input.trim() || loading}
                 className="w-10 h-10 rounded-full bg-white hover:bg-neutral-200 text-black flex items-center justify-center transition-all duration-200 disabled:opacity-30 flex-shrink-0"
+                aria-label="Send message"
               >
                 <Send size={16} />
               </button>
