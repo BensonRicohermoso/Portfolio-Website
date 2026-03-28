@@ -2,8 +2,8 @@ import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MessageCircle, X, Send, Bot } from 'lucide-react'
 
-// This matches the Vercel Serverless Function path at /api/chat.js
-const BACKEND_CHAT_API = '/api/chat';
+// Relative path for Vercel/Vite deployment
+const GEMINI_API_URL = '/api/chat';
 
 const SYSTEM_PROMPT = `You are a personal AI assistant for Benson Ricohermoso's portfolio website. You only answer questions related to Benson and his work. If asked anything unrelated, politely redirect the conversation back to Benson.
 
@@ -29,54 +29,50 @@ export default function ChatBot() {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, loading])
 
-  const buildChatHistory = (userText) => {
-    return [
-      { role: 'system', content: SYSTEM_PROMPT },
-      ...messages.filter(m => m.role === 'user' || m.role === 'bot').map(m => ({
-        role: m.role === 'bot' ? 'assistant' : 'user',
-        content: m.text
-      })),
-      { role: 'user', content: userText }
-    ];
-  }
-
   const sendMessage = async () => {
     if (!input.trim() || loading) return;
 
     const userText = input.trim();
-    setInput('');
+    
+    // Update UI with user message and start loading
     setMessages(prev => [...prev, { role: 'user', text: userText }]);
+    setInput('');
     setLoading(true);
 
     try {
-      const response = await fetch(BACKEND_CHAT_API, {
+      // Build the message history for the backend
+      const history = [
+        { role: 'system', content: SYSTEM_PROMPT },
+        ...messages.map(m => ({
+          role: m.role === 'bot' ? 'assistant' : 'user',
+          content: m.text
+        })),
+        { role: 'user', content: userText }
+      ];
+
+      const response = await fetch(GEMINI_API_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify({
-          messages: buildChatHistory(userText),
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: history }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Chat API error');
+        throw new Error(data.error || `Error: ${response.status}`);
       }
 
-      // Ensure we extract the 'text' property returned by our api/chat.js
-      const botResponse = data.text || "I'm sorry, I'm having trouble connecting right now.";
+      // Add Bot response to UI
+      const botResponse = data.text || "I'm sorry, I couldn't get a response. Try again later.";
       setMessages(prev => [...prev, { role: 'bot', text: botResponse }]);
 
     } catch (err) {
-      console.error('Frontend Chat Error:', err);
-      setMessages(prev => [...prev, { role: 'bot', text: "Sorry, I couldn't process that. Please check your connection or try again later." }]);
+      console.error("Frontend Chat Error:", err);
+      setMessages(prev => [...prev, { role: 'bot', text: "Sorry, I'm having trouble connecting to the server. Please try again later." }]);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   const handleKey = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -95,28 +91,27 @@ export default function ChatBot() {
         whileTap={{ scale: 0.95 }}
       >
         <AnimatePresence mode="wait">
-          {open
-            ? (
-              <motion.div
-                key="x"
-                initial={{ rotate: -90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: 90, opacity: 0 }}
-                transition={{ duration: 0.15 }}
-              >
-                <X size={22} />
-              </motion.div>
-            ) : (
-              <motion.div
-                key="msg"
-                initial={{ rotate: 90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: -90, opacity: 0 }}
-                transition={{ duration: 0.15 }}
-              >
-                <MessageCircle size={22} />
-              </motion.div>
-            )}
+          {open ? (
+            <motion.div
+              key="x"
+              initial={{ rotate: -90, opacity: 0 }}
+              animate={{ rotate: 0, opacity: 1 }}
+              exit={{ rotate: 90, opacity: 0 }}
+              transition={{ duration: 0.15 }}
+            >
+              <X size={22} />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="msg"
+              initial={{ rotate: 90, opacity: 0 }}
+              animate={{ rotate: 0, opacity: 1 }}
+              exit={{ rotate: -90, opacity: 0 }}
+              transition={{ duration: 0.15 }}
+            >
+              <MessageCircle size={22} />
+            </motion.div>
+          )}
         </AnimatePresence>
       </motion.button>
 
@@ -159,7 +154,6 @@ export default function ChatBot() {
                 </div>
               ))}
 
-              {/* Move the loading indicator inside the same flow */}
               {loading && (
                 <div key="loading-indicator" className="flex justify-start">
                   <div className="bg-[#1a1a1a] px-4 py-3 rounded-2xl flex gap-1.5">
@@ -201,4 +195,4 @@ export default function ChatBot() {
       </AnimatePresence>
     </>
   );
-} 
+}

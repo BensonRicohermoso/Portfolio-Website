@@ -139,7 +139,7 @@ export default function Hero() {
         {/* Responsive: original stacked layout on desktop, side-by-side only on mobile */}
         {/* Mobile (sm and below): side-by-side */}
         <div className="block sm:hidden w-full">
-          <HeroProfileAndPreview />
+          <HeroProfileAndPreview disablePreviewTilt={showImageModal} />
         </div>
         {/* Desktop (md and up): preview cards left, profile picture right */}
         <div className="hidden sm:flex w-full flex-row items-center justify-center gap-12">

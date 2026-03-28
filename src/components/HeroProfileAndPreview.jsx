@@ -1,6 +1,6 @@
 import ProfileCard from './ProfileCard';
 
-export default function HeroProfileAndPreview() {
+export default function HeroProfileAndPreview({ disablePreviewTilt }) {
   return (
     <div className="flex flex-col md:flex-row items-center justify-center gap-8 w-full">
       {/* Profile Card */}
@@ -9,6 +9,7 @@ export default function HeroProfileAndPreview() {
           name="Benson Ricohermoso"
           title="Full-Stack Web Developer & AI Specialist"
           avatarUrl="/images/profile.jpg"
+          enableTilt={!disablePreviewTilt}
         />
       </div>
       {/* Preview Cards (reuse from Hero) */}
