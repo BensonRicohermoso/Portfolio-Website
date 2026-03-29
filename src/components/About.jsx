@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import InfiniteMenu from './Infinitemenu'
+import InfiniteMenu from './InfiniteMenu'
 
 // Placeholder items — swap out images/links/titles when ready
 const items = [
