@@ -124,14 +124,19 @@ export default function Hero() {
         </div>
 
         {/* DESKTOP VIEW */}
-        <div className="hidden lg:grid grid-cols-2 gap-12 items-center">
+        <div className="hidden lg:grid lg:grid-cols-[1.2fr_0.8fr] gap-12 items-center">
             
             {/* LEFT: Content */}
-            <div className="flex flex-col items-start text-left">
+            <div className="flex flex-col items-start text-left overflow-visible">
                 <motion.p initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="text-neutral-500 font-medium mb-3 tracking-widest uppercase text-xs">
                     Welcome to my portfolio
                 </motion.p>
-                <motion.h1 initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }} className="text-6xl font-bold text-white mb-4 leading-tight">
+                <motion.h1 
+                  initial={{ opacity: 0, x: -20 }} 
+                  animate={{ opacity: 1, x: 0 }} 
+                  transition={{ delay: 0.1 }} 
+                  className="text-6xl font-bold text-white mb-4 leading-tight whitespace-nowrap"
+                >
                     Benson Ricohermoso
                 </motion.h1>
                 <motion.p initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="text-xl text-neutral-400 mb-8 font-light">
@@ -168,7 +173,6 @@ export default function Hero() {
                     <div className="relative group">
                         <div className="absolute -inset-2 bg-gradient-to-tr from-white/10 to-transparent rounded-xl blur-2xl opacity-20 group-hover:opacity-40 transition duration-1000"></div>
                         
-                        {/* Frame: Reduced from 380x420 to 340x400 | Rounding changed to xl */}
                         <div className="relative w-[340px] h-[400px] rounded-xl border border-white/10 overflow-hidden bg-[#111] shadow-2xl">
                             <img 
                                 src="/images/profile.jpg" 
