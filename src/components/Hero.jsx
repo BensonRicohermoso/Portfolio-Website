@@ -129,9 +129,8 @@ export default function Hero() {
   const [showImageModal, setShowImageModal] = useState(false)
   const [views, setViews] = useState(null)
 
-  // Fetch and Increment visit count on component mount
   useEffect(() => {
-    fetch('/api/views') // Ensure your API file is named views.js
+    fetch('/api/views')
       .then(res => res.json())
       .then(data => {
         if (data.views) setViews(data.views)
@@ -150,110 +149,123 @@ export default function Hero() {
   }, [])
 
   return (
-    <section id="home" className="relative min-h-screen flex items-start justify-center px-6 pt-36 overflow-hidden">
+    <section id="home" className="relative min-h-screen flex items-center justify-center px-6 overflow-hidden">
       <div className="absolute inset-0 z-0">
         <Threads amplitude={1} distance={0} enableMouseInteraction />
       </div>
 
-      <div className="relative z-10 max-w-5xl w-full mx-auto flex flex-col items-center gap-8 pt-8 pb-24">
-        <div className="w-full flex flex-col items-center">
-          <motion.p 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-neutral-500 font-medium mb-3 tracking-widest uppercase text-xs text-center"
-          >
-            Welcome to my portfolio
-          </motion.p>
-          <motion.h1 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl md:text-5xl font-bold text-white mb-3 leading-tight text-center"
-          >
-            Benson Ricohermoso
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-lg text-neutral-400 mb-4 font-light text-center"
-          >
-            Software Engineer & AI Specialist
-          </motion.p>
+      <div className="relative z-10 max-w-6xl w-full mx-auto pt-36 pb-24">
+        
+        {/* MOBILE VIEW: Keeps your original responsiveness intact */}
+        <div className="lg:hidden flex flex-col items-center">
+            <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-neutral-500 font-medium mb-3 tracking-widest uppercase text-xs text-center">
+                Welcome to my portfolio
+            </motion.p>
+            <motion.h1 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl font-bold text-white mb-3 text-center">
+                Benson Ricohermoso
+            </motion.h1>
+            <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-lg text-neutral-400 mb-4 font-light text-center">
+                Software Engineer & AI Specialist
+            </motion.p>
 
-          {/* Live View Counter Badge */}
-          {views !== null && (
-            <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="flex items-center gap-2.5 mb-8 px-4 py-2 rounded-full bg-white/[0.03] border border-white/10 backdrop-blur-md shadow-lg"
-            >
-              <div className="relative flex h-2 w-2">
-                {/* Subtle pulse animation to show it's "Live" */}
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-              </div>
-    
-              <div className="flex items-center gap-1.5">
-                <Eye size={15} className="text-neutral-300" />
-                <span className="text-sm text-neutral-200 font-semibold tracking-wide">
-                  {views.toLocaleString()}
-                </span>
-                <span className="text-[10px] text-neutral-500 font-bold tracking-widest uppercase ml-0.5">
-                  Views
-                </span>
-              </div>
-            </motion.div>
-          )}
-          
-          <div className="flex flex-wrap gap-3 justify-center mb-8">
-            <a href="#contact" className="inline-flex items-center gap-2 bg-white hover:bg-neutral-200 text-black text-sm font-semibold px-5 py-2.5 rounded-full transition-colors duration-200">
-              <Mail size={15} /> Email Me Now
-            </a>
-            <button onClick={() => setShowModal(true)} className="inline-flex items-center gap-2 backdrop-blur-md bg-white/10 hover:bg-white/20 text-white text-sm font-semibold px-5 py-2.5 rounded-full border border-white/20 hover:border-white/40 transition-colors duration-200">
-              <FileText size={15} /> Request CV
-            </button>
-          </div>
-        </div>
-
-        <div className="block sm:hidden w-full">
-          <HeroProfileAndPreview disablePreviewTilt={showImageModal} />
-        </div>
-
-        <div className="hidden sm:flex w-full flex-row items-center justify-center gap-12">
-          <motion.div className="flex flex-col items-center" initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7 }}>
-            <div className="w-28 sm:w-36 md:w-48 bg-[#111111] border border-[#222222] rounded-2xl overflow-hidden shadow-2xl">
-              <div className="flex items-center justify-between px-3 py-2 border-b border-[#222222]">
-                <span className="text-white text-[10px] uppercase font-bold tracking-wider">{categories[catIndex].label}</span>
-              </div>
-              <div className="relative h-16 sm:h-20 md:h-24 bg-[#0a0a0a] overflow-hidden flex items-center justify-center">
-                <AnimatePresence mode="wait">
-                  <motion.div key={catIndex} className="absolute inset-0 flex items-center justify-center p-2" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.1 }} transition={{ duration: 0.3 }}>
-                    <img src={categories[catIndex].image} alt={categories[catIndex].label} className="h-full w-full object-contain cursor-zoom-in hover:scale-105 transition-transform" onClick={() => setShowImageModal(true)} />
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-              <div className="flex items-center justify-between px-2 py-1.5 bg-[#0d0d0d]">
-                <button onClick={prev} className="text-neutral-500 hover:text-white transition-colors p-1"><ChevronLeft size={14} /></button>
-                <div className="flex gap-1">
-                  {categories.map((_, i) => (
-                    <span key={i} className={`w-1 h-1 rounded-full transition-all duration-300 ${i === catIndex ? 'bg-white w-2' : 'bg-white/20'}`} />
-                  ))}
+            {views !== null && (
+                <div className="flex items-center gap-2.5 mb-8 px-4 py-2 rounded-full bg-white/[0.03] border border-white/10">
+                    <Eye size={15} className="text-neutral-300" />
+                    <span className="text-sm text-neutral-200 font-semibold">{views.toLocaleString()} Views</span>
                 </div>
-                <button onClick={next} className="text-neutral-500 hover:text-white transition-colors p-1"><ChevronRight size={14} /></button>
-              </div>
-            </div>
-          </motion.div>
+            )}
 
-          <motion.div className="flex-shrink-0" initial={{ opacity: 0, scale: 0.85 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7 }}>
-            <div className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-white/20 to-white/0 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
-              <div className="relative w-24 h-24 sm:w-32 sm:h-32 md:w-44 md:h-44 rounded-2xl border-2 border-white/10 overflow-hidden bg-[#111]">
-                <img src="/images/profile.jpg" alt="Benson Ricohermoso" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-              </div>
+            <div className="flex flex-wrap gap-3 justify-center mb-8">
+                <a href="#contact" className="inline-flex items-center gap-2 bg-white text-black text-sm font-semibold px-5 py-2.5 rounded-full">
+                    <Mail size={15} /> Email Me Now
+                </a>
+                <button onClick={() => setShowModal(true)} className="inline-flex items-center gap-2 bg-white/10 text-white text-sm font-semibold px-5 py-2.5 rounded-full border border-white/20">
+                    <FileText size={15} /> Request CV
+                </button>
             </div>
-          </motion.div>
+            
+            <HeroProfileAndPreview disablePreviewTilt={showImageModal} />
+        </div>
+
+        {/* DESKTOP VIEW: New Layout with Left Content and Right Image */}
+        <div className="hidden lg:grid grid-cols-2 gap-12 items-center">
+            
+            {/* LEFT DIV: Contents + Rectangle Preview */}
+            <div className="flex flex-col items-start text-left">
+                <motion.p initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="text-neutral-500 font-medium mb-4 tracking-widest uppercase text-sm">
+                    Welcome to my portfolio
+                </motion.p>
+                <motion.h1 initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }} className="text-6xl font-bold text-white mb-4 leading-tight">
+                    Benson Ricohermoso
+                </motion.h1>
+                <motion.p initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="text-2xl text-neutral-400 mb-8 font-light">
+                    Software Engineer & AI Specialist
+                </motion.p>
+
+                {/* View Counter Badge */}
+                {views !== null && (
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="flex items-center gap-3 mb-10 px-5 py-2.5 rounded-full bg-white/[0.03] border border-white/10 backdrop-blur-md">
+                        <div className="relative flex h-2.5 w-2.5">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Eye size={18} className="text-neutral-300" />
+                            <span className="text-base text-neutral-200 font-bold">{views.toLocaleString()}</span>
+                            <span className="text-xs text-neutral-500 font-bold uppercase tracking-tighter">Views</span>
+                        </div>
+                    </motion.div>
+                )}
+
+                <div className="flex gap-4 mb-12">
+                    <a href="#contact" className="inline-flex items-center gap-2 bg-white hover:bg-neutral-200 text-black text-base font-bold px-8 py-3.5 rounded-full transition-all">
+                        <Mail size={18} /> Email Me Now
+                    </a>
+                    <button onClick={() => setShowModal(true)} className="inline-flex items-center gap-2 backdrop-blur-md bg-white/10 hover:bg-white/20 text-white text-base font-bold px-8 py-3.5 rounded-full border border-white/20 transition-all">
+                        <FileText size={18} /> Request CV
+                    </button>
+                </div>
+
+                {/* Rectangle Preview - Now aligned in the left div */}
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="w-80 bg-[#111111] border border-[#222222] rounded-2xl overflow-hidden shadow-2xl">
+                    <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#222222]">
+                        <span className="text-white text-xs uppercase font-bold tracking-widest">{categories[catIndex].label}</span>
+                        <div className="flex gap-1">
+                             <div className="w-2 h-2 rounded-full bg-red-500/20" />
+                             <div className="w-2 h-2 rounded-full bg-yellow-500/20" />
+                             <div className="w-2 h-2 rounded-full bg-green-500/20" />
+                        </div>
+                    </div>
+                    <div className="relative h-40 bg-[#0a0a0a] overflow-hidden flex items-center justify-center">
+                        <AnimatePresence mode="wait">
+                            <motion.div key={catIndex} className="absolute inset-0 flex items-center justify-center p-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                                <img src={categories[catIndex].image} alt={categories[catIndex].label} className="h-full w-full object-contain cursor-zoom-in" onClick={() => setShowImageModal(true)} />
+                            </motion.div>
+                        </AnimatePresence>
+                    </div>
+                    <div className="flex items-center justify-between px-3 py-2 bg-[#0d0d0d]">
+                        <button onClick={prev} className="text-neutral-500 hover:text-white transition-colors"><ChevronLeft size={18} /></button>
+                        <div className="flex gap-1.5">
+                            {categories.map((_, i) => (
+                                <span key={i} className={`h-1 rounded-full transition-all duration-300 ${i === catIndex ? 'bg-white w-4' : 'bg-white/20 w-1'}`} />
+                            ))}
+                        </div>
+                        <button onClick={next} className="text-neutral-500 hover:text-white transition-colors"><ChevronRight size={18} /></button>
+                    </div>
+                </motion.div>
+            </div>
+
+            {/* RIGHT DIV: Profile Image */}
+            <div className="flex justify-end">
+                <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }}>
+                    <div className="relative group">
+                        <div className="absolute -inset-1.5 bg-gradient-to-tr from-white/20 to-transparent rounded-[2.5rem] blur-xl opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+                        <div className="relative w-80 h-80 xl:w-[450px] xl:h-[450px] rounded-[2rem] border-2 border-white/10 overflow-hidden bg-[#111] shadow-2xl">
+                            <img src="/images/profile.jpg" alt="Benson Ricohermoso" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                        </div>
+                    </div>
+                </motion.div>
+            </div>
         </div>
       </div>
 
