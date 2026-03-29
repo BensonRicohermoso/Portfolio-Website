@@ -112,9 +112,9 @@ function ProjectModal({ index, onClose }) {
         {/* Close */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 z-10 text-neutral-500 hover:text-white bg-black/50 rounded-full p-1.5 transition-colors"
+          className="absolute top-3 right-3 z-10 text-white bg-black/50 rounded-full p-2 transition-colors"
         >
-          <X size={15} />
+          <X size={26} />
         </button>
 
         {/* Image carousel */}

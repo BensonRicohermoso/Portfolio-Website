@@ -9,6 +9,7 @@ import LogoLoop from './components/LogoLoop';
 import { SiReact, SiNextdotjs, SiTypescript, SiTailwindcss } from 'react-icons/si';
 import About from './components/About';
 import TechStack from './components/TechStack';
+import ScrollVelocity from './components/ScrollVelocity';
 import Projects from './components/Projects';
 import Certifications from './components/Certifications';
 import Footer from './components/Footer';
@@ -72,6 +73,15 @@ export default function App() {
       </div>
       <About />
       <TechStack />
+      <ScrollVelocity
+        texts={[
+          'Building AI-powered web applications that solve real-world problems',
+          
+        ]}
+        velocity={100}
+        className="text-2xl md:text-4xl custom-scroll-text"
+        parallaxClassName="[&>*:first-child]:mb-16"
+      />
       <Projects />
       <Certifications />
       <Footer />
