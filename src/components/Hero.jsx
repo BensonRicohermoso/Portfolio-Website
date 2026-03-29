@@ -156,7 +156,7 @@ export default function Hero() {
 
       <div className="relative z-10 max-w-6xl w-full mx-auto pt-36 pb-24">
         
-        {/* MOBILE VIEW: Keeps your original responsiveness intact */}
+        {/* MOBILE VIEW: Unchanged */}
         <div className="lg:hidden flex flex-col items-center">
             <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-neutral-500 font-medium mb-3 tracking-widest uppercase text-xs text-center">
                 Welcome to my portfolio
@@ -187,10 +187,10 @@ export default function Hero() {
             <HeroProfileAndPreview disablePreviewTilt={showImageModal} />
         </div>
 
-        {/* DESKTOP VIEW: New Layout with Left Content and Right Image */}
+        {/* DESKTOP VIEW: Removed Preview Card, Adjusted Profile Image Dimensions */}
         <div className="hidden lg:grid grid-cols-2 gap-12 items-center">
             
-            {/* LEFT DIV: Contents + Rectangle Preview */}
+            {/* LEFT DIV: Text Content Only */}
             <div className="flex flex-col items-start text-left">
                 <motion.p initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="text-neutral-500 font-medium mb-4 tracking-widest uppercase text-sm">
                     Welcome to my portfolio
@@ -202,7 +202,6 @@ export default function Hero() {
                     Software Engineer & AI Specialist
                 </motion.p>
 
-                {/* View Counter Badge */}
                 {views !== null && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="flex items-center gap-3 mb-10 px-5 py-2.5 rounded-full bg-white/[0.03] border border-white/10 backdrop-blur-md">
                         <div className="relative flex h-2.5 w-2.5">
@@ -217,7 +216,7 @@ export default function Hero() {
                     </motion.div>
                 )}
 
-                <div className="flex gap-4 mb-12">
+                <div className="flex gap-4">
                     <a href="#contact" className="inline-flex items-center gap-2 bg-white hover:bg-neutral-200 text-black text-base font-bold px-8 py-3.5 rounded-full transition-all">
                         <Mail size={18} /> Email Me Now
                     </a>
@@ -225,43 +224,22 @@ export default function Hero() {
                         <FileText size={18} /> Request CV
                     </button>
                 </div>
-
-                {/* Rectangle Preview - Now aligned in the left div */}
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="w-80 bg-[#111111] border border-[#222222] rounded-2xl overflow-hidden shadow-2xl">
-                    <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#222222]">
-                        <span className="text-white text-xs uppercase font-bold tracking-widest">{categories[catIndex].label}</span>
-                        <div className="flex gap-1">
-                             <div className="w-2 h-2 rounded-full bg-red-500/20" />
-                             <div className="w-2 h-2 rounded-full bg-yellow-500/20" />
-                             <div className="w-2 h-2 rounded-full bg-green-500/20" />
-                        </div>
-                    </div>
-                    <div className="relative h-40 bg-[#0a0a0a] overflow-hidden flex items-center justify-center">
-                        <AnimatePresence mode="wait">
-                            <motion.div key={catIndex} className="absolute inset-0 flex items-center justify-center p-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                                <img src={categories[catIndex].image} alt={categories[catIndex].label} className="h-full w-full object-contain cursor-zoom-in" onClick={() => setShowImageModal(true)} />
-                            </motion.div>
-                        </AnimatePresence>
-                    </div>
-                    <div className="flex items-center justify-between px-3 py-2 bg-[#0d0d0d]">
-                        <button onClick={prev} className="text-neutral-500 hover:text-white transition-colors"><ChevronLeft size={18} /></button>
-                        <div className="flex gap-1.5">
-                            {categories.map((_, i) => (
-                                <span key={i} className={`h-1 rounded-full transition-all duration-300 ${i === catIndex ? 'bg-white w-4' : 'bg-white/20 w-1'}`} />
-                            ))}
-                        </div>
-                        <button onClick={next} className="text-neutral-500 hover:text-white transition-colors"><ChevronRight size={18} /></button>
-                    </div>
-                </motion.div>
             </div>
 
-            {/* RIGHT DIV: Profile Image */}
+            {/* RIGHT DIV: Profile Image (Narrower Width, Increased Height) */}
             <div className="flex justify-end">
-                <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }}>
+                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }}>
                     <div className="relative group">
-                        <div className="absolute -inset-1.5 bg-gradient-to-tr from-white/20 to-transparent rounded-[2.5rem] blur-xl opacity-20 group-hover:opacity-40 transition duration-1000"></div>
-                        <div className="relative w-80 h-80 xl:w-[450px] xl:h-[450px] rounded-[2rem] border-2 border-white/10 overflow-hidden bg-[#111] shadow-2xl">
-                            <img src="/images/profile.jpg" alt="Benson Ricohermoso" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                        {/* Soft glow background */}
+                        <div className="absolute -inset-2 bg-gradient-to-tr from-white/10 to-transparent rounded-[2.5rem] blur-2xl opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+                        
+                        {/* Portrait Frame: Reduced Width (380px), Increased Height (560px) */}
+                        <div className="relative w-[380px] h-[560px] rounded-[2.5rem] border-2 border-white/10 overflow-hidden bg-[#111] shadow-2xl">
+                            <img 
+                                src="/images/profile.jpg" 
+                                alt="Benson Ricohermoso" 
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                            />
                         </div>
                     </div>
                 </motion.div>
@@ -269,6 +247,7 @@ export default function Hero() {
         </div>
       </div>
 
+      {/* Modals */}
       <AnimatePresence>
         {showImageModal && (
           <motion.div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/95 px-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowImageModal(false)}>
