@@ -86,7 +86,7 @@ function ProjectModal({ index, onClose }) {
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center px-2 sm:px-4"
+className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -97,7 +97,7 @@ function ProjectModal({ index, onClose }) {
       {/* Modal */}
       <motion.div
         key={index}
-        className="relative w-full max-w-2xl bg-[#111111] border border-[#222222] rounded-2xl overflow-hidden shadow-2xl mx-2 sm:mx-4 md:mx-0"
+className="relative w-full max-w-[95vw] sm:max-w-2xl bg-[#111111] border border-[#222222] rounded-2xl overflow-hidden shadow-2xl mx-0"
         style={{ maxHeight: '95vh' }}
         initial={{ scale: 0.85, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -113,8 +113,9 @@ function ProjectModal({ index, onClose }) {
         </button>
 
         {/* Image with arrows */}
-        <div className="relative h-40 xs:h-48 sm:h-56 md:h-64 bg-[#0a0a0a] flex items-center justify-center overflow-hidden">
+        <div className="relative h-44 sm:h-48 md:h-56 lg:h-64 bg-[#0a0a0a] flex items-center justify-center overflow-hidden">
           <AnimatePresence mode="wait">
+
             <motion.div
               key={imgIndex}
               className="absolute inset-0 flex items-center justify-center"
@@ -159,8 +160,9 @@ function ProjectModal({ index, onClose }) {
         </div>
 
         {/* Content */}
-        <div className="p-4 sm:p-8 overflow-y-auto" style={{ maxHeight: 'calc(95vh - 10rem)' }}>
+        <div className="p-3 sm:p-6 overflow-y-auto" style={{ maxHeight: 'calc(95vh - 10rem)' }}>
           <div className="flex flex-col sm:flex-row items-start justify-between gap-2 sm:gap-4 mb-3">
+
             <h3 className="text-white font-semibold text-lg sm:text-xl">{project.title}</h3>
             <a
               href={project.siteUrl}
