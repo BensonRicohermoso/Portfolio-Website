@@ -86,7 +86,7 @@ function ProjectModal({ index, onClose }) {
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center px-4"
+      className="fixed inset-0 z-50 flex items-center justify-center px-2 sm:px-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -97,7 +97,8 @@ function ProjectModal({ index, onClose }) {
       {/* Modal */}
       <motion.div
         key={index}
-        className="relative w-full max-w-2xl bg-[#111111] border border-[#222222] rounded-2xl overflow-hidden shadow-2xl mx-4"
+        className="relative w-full max-w-2xl bg-[#111111] border border-[#222222] rounded-2xl overflow-hidden shadow-2xl mx-2 sm:mx-4 md:mx-0"
+        style={{ maxHeight: '95vh' }}
         initial={{ scale: 0.85, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.85, opacity: 0 }}
@@ -106,13 +107,13 @@ function ProjectModal({ index, onClose }) {
         {/* Close */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 z-10 text-neutral-500 hover:text-white bg-black/50 rounded-full p-1 transition-colors"
+          className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 text-neutral-500 hover:text-white bg-black/50 rounded-full p-1 transition-colors"
         >
           <X size={16} />
         </button>
 
         {/* Image with arrows */}
-        <div className="relative h-56 bg-[#0a0a0a] flex items-center justify-center overflow-hidden">
+        <div className="relative h-40 xs:h-48 sm:h-56 md:h-64 bg-[#0a0a0a] flex items-center justify-center overflow-hidden">
           <AnimatePresence mode="wait">
             <motion.div
               key={imgIndex}
@@ -133,7 +134,7 @@ function ProjectModal({ index, onClose }) {
           {/* Left arrow */}
           <button
             onClick={handlePrev}
-            className="absolute left-3 top-1/2 -translate-y-1/2 z-10 bg-black/60 hover:bg-black/90 border border-white/10 hover:border-white/30 text-white rounded-full p-2 transition-all duration-200"
+            className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 z-10 bg-black/60 hover:bg-black/90 border border-white/10 hover:border-white/30 text-white rounded-full p-2 transition-all duration-200"
           >
             <ChevronLeft size={18} />
           </button>
@@ -141,13 +142,13 @@ function ProjectModal({ index, onClose }) {
           {/* Right arrow */}
           <button
             onClick={handleNext}
-            className="absolute right-3 top-1/2 -translate-y-1/2 z-10 bg-black/60 hover:bg-black/90 border border-white/10 hover:border-white/30 text-white rounded-full p-2 transition-all duration-200"
+            className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 z-10 bg-black/60 hover:bg-black/90 border border-white/10 hover:border-white/30 text-white rounded-full p-2 transition-all duration-200"
           >
             <ChevronRight size={18} />
           </button>
 
           {/* Dot indicators */}
-          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+          <div className="absolute bottom-2 sm:bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
             {project.images.map((_, i) => (
               <span
                 key={i}
@@ -158,15 +159,15 @@ function ProjectModal({ index, onClose }) {
         </div>
 
         {/* Content */}
-        <div className="p-8">
-          <div className="flex items-start justify-between gap-4 mb-3">
-            <h3 className="text-white font-semibold text-xl">{project.title}</h3>
+        <div className="p-4 sm:p-8 overflow-y-auto" style={{ maxHeight: 'calc(95vh - 10rem)' }}>
+          <div className="flex flex-col sm:flex-row items-start justify-between gap-2 sm:gap-4 mb-3">
+            <h3 className="text-white font-semibold text-lg sm:text-xl">{project.title}</h3>
             <a
               href={project.siteUrl}
               target="_blank"
               rel="noopener noreferrer"
               onClick={e => e.stopPropagation()}
-              className="inline-flex items-center gap-1.5 bg-white hover:bg-neutral-200 text-black text-xs font-semibold px-3 py-1.5 rounded-full transition-colors duration-200 whitespace-nowrap flex-shrink-0"
+              className="inline-flex items-center gap-1.5 bg-white hover:bg-neutral-200 text-black text-xs font-semibold px-3 py-1.5 rounded-full transition-colors duration-200 whitespace-nowrap flex-shrink-0 mt-2 sm:mt-0"
             >
               <ExternalLink size={12} />
               Visit Site
