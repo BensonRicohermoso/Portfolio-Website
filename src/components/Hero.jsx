@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Mail, FileText, X, Send, Loader2, Eye } from 'lucide-react'
 import Threads from './Threads'
 import HeroProfileAndPreview from './HeroProfileAndPreview'
+import ProfileCard from './ProfileCard'
 
 const categories = [
   { label: 'Website', image: '/images/hero-cards/web-preview.png' },
@@ -73,6 +74,14 @@ export default function Hero() {
   const [catIndex, setCatIndex] = useState(0)
   const [showImageModal, setShowImageModal] = useState(false)
   const [views, setViews] = useState(null)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   useEffect(() => {
     fetch('/api/views').then(res => res.json()).then(data => { if (data.views) setViews(data.views) }).catch(err => console.error(err))
@@ -91,102 +100,130 @@ export default function Hero() {
       </div>
 
       <div className="relative z-10 max-w-6xl w-full mx-auto">
-        
+
         {/* MOBILE VIEW */}
         <div className="lg:hidden flex flex-col items-center">
-            <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-neutral-500 font-medium mb-3 tracking-widest uppercase text-[10px] text-center">
-                Welcome to my portfolio
-            </motion.p>
-            <motion.h1 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl font-bold text-white mb-2 text-center">
-                Benson Ricohermoso
-            </motion.h1>
-            <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-base text-neutral-400 mb-6 font-light text-center">
-                Software Engineer & AI Specialist
-            </motion.p>
+          <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-neutral-500 font-medium mb-3 tracking-widest uppercase text-[10px] text-center">
+            Welcome to my portfolio
+          </motion.p>
+          <motion.h1 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl font-bold text-white mb-2 text-center">
+            Benson Ricohermoso
+          </motion.h1>
+          <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-base text-neutral-400 mb-6 font-light text-center">
+            Software Engineer & AI Specialist
+          </motion.p>
 
-            {views !== null && (
-                <div className="flex items-center gap-2 mb-8 px-4 py-1.5 rounded-full bg-white/[0.03] border border-white/10">
-                    <Eye size={14} className="text-neutral-400" />
-                    <span className="text-xs text-neutral-300 font-medium">{views.toLocaleString()} Views</span>
-                </div>
-            )}
-
-            <div className="flex flex-wrap gap-3 justify-center mb-10">
-                <a href="#contact" className="inline-flex items-center gap-2 bg-white text-black text-xs font-bold px-5 py-2.5 rounded-full">
-                    <Mail size={14} /> Email Me Now
-                </a>
-                <button onClick={() => setShowModal(true)} className="inline-flex items-center gap-2 bg-white/10 text-white text-xs font-bold px-5 py-2.5 rounded-full border border-white/20">
-                    <FileText size={14} /> Request CV
-                </button>
+          {views !== null && (
+            <div className="flex items-center gap-2 mb-8 px-4 py-1.5 rounded-full bg-white/[0.03] border border-white/10">
+              <Eye size={14} className="text-neutral-400" />
+              <span className="text-xs text-neutral-300 font-medium">{views.toLocaleString()} Views</span>
             </div>
-            
-            <HeroProfileAndPreview disablePreviewTilt={showImageModal} />
+          )}
+
+          <div className="flex flex-wrap gap-3 justify-center mb-10">
+            <a href="#contact" className="inline-flex items-center gap-2 bg-white text-black text-xs font-bold px-5 py-2.5 rounded-full">
+              <Mail size={14} /> Email Me Now
+            </a>
+            <button onClick={() => setShowModal(true)} className="inline-flex items-center gap-2 bg-white/10 text-white text-xs font-bold px-5 py-2.5 rounded-full border border-white/20">
+              <FileText size={14} /> Request CV
+            </button>
+          </div>
+
+          {/* Mobile ProfileCard — tilt fully disabled */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="flex justify-center w-full"
+            style={{ maxWidth: '260px', margin: '0 auto' }}
+          >
+            <ProfileCard
+              avatarUrl="/images/profile.jpg"
+              miniAvatarUrl="/images/profile.jpg"
+              name="Benson"
+              title="Software Engineer"
+              handle="bricohermoso"
+              status="Open to work"
+              contactText="Contact"
+              onContactClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+              enableTilt={false}
+              enableMobileTilt={false}
+              behindGlowEnabled={false}
+              className="scale-[0.82] origin-top"
+            />
+          </motion.div>
         </div>
 
         {/* DESKTOP VIEW */}
         <div className="hidden lg:grid lg:grid-cols-[1.2fr_0.8fr] gap-12 items-center">
-            
-            {/* LEFT: Content */}
-            <div className="flex flex-col items-start text-left overflow-visible">
-                <motion.p initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="text-neutral-500 font-medium mb-3 tracking-widest uppercase text-xs">
-                    Welcome to my portfolio
-                </motion.p>
-                <motion.h1 
-                  initial={{ opacity: 0, x: -20 }} 
-                  animate={{ opacity: 1, x: 0 }} 
-                  transition={{ delay: 0.1 }} 
-                  className="text-6xl font-bold text-white mb-4 leading-tight whitespace-nowrap"
-                >
-                    Benson Ricohermoso
-                </motion.h1>
-                <motion.p initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="text-xl text-neutral-400 mb-8 font-light">
-                    Software Engineer & AI Specialist
-                </motion.p>
 
-                {views !== null && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="flex items-center gap-3 mb-10 px-4 py-2 rounded-full bg-white/[0.03] border border-white/10 backdrop-blur-md">
-                        <div className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Eye size={16} className="text-neutral-300" />
-                            <span className="text-sm text-neutral-200 font-bold">{views.toLocaleString()}</span>
-                            <span className="text-[10px] text-neutral-500 font-bold uppercase tracking-tighter">Views</span>
-                        </div>
-                    </motion.div>
-                )}
+          {/* LEFT: Content */}
+          <div className="flex flex-col items-start text-left overflow-visible">
+            <motion.p initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="text-neutral-500 font-medium mb-3 tracking-widest uppercase text-xs">
+              Welcome to my portfolio
+            </motion.p>
+            <motion.h1
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.1 }}
+              className="text-6xl font-bold text-white mb-4 leading-tight whitespace-nowrap"
+            >
+              Benson Ricohermoso
+            </motion.h1>
+            <motion.p initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="text-xl text-neutral-400 mb-8 font-light">
+              Software Engineer & AI Specialist
+            </motion.p>
 
-                <div className="flex gap-4">
-                    <a href="#contact" className="inline-flex items-center gap-2 bg-white hover:bg-neutral-200 text-black text-sm font-bold px-7 py-3 rounded-full transition-all">
-                        <Mail size={16} /> Email Me Now
-                    </a>
-                    <button onClick={() => setShowModal(true)} className="inline-flex items-center gap-2 backdrop-blur-md bg-white/10 hover:bg-white/20 text-white text-sm font-bold px-7 py-3 rounded-full border border-white/20 transition-all">
-                        <FileText size={16} /> Request CV
-                    </button>
+            {views !== null && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="flex items-center gap-3 mb-10 px-4 py-2 rounded-full bg-white/[0.03] border border-white/10 backdrop-blur-md">
+                <div className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                 </div>
-            </div>
+                <div className="flex items-center gap-2">
+                  <Eye size={16} className="text-neutral-300" />
+                  <span className="text-sm text-neutral-200 font-bold">{views.toLocaleString()}</span>
+                  <span className="text-[10px] text-neutral-500 font-bold uppercase tracking-tighter">Views</span>
+                </div>
+              </motion.div>
+            )}
 
-            {/* RIGHT: Optimized Profile Image */}
-            <div className="flex justify-end items-center">
-                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }}>
-                    <div className="relative group">
-                        <div className="absolute -inset-2 bg-gradient-to-tr from-white/10 to-transparent rounded-xl blur-2xl opacity-20 group-hover:opacity-40 transition duration-1000"></div>
-                        
-                        <div className="relative w-[340px] h-[400px] rounded-xl border border-white/10 overflow-hidden bg-[#111] shadow-2xl">
-                            <img 
-                                src="/images/profile.jpg" 
-                                alt="Benson Ricohermoso" 
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-                            />
-                        </div>
-                    </div>
-                </motion.div>
+            <div className="flex gap-4">
+              <a href="#contact" className="inline-flex items-center gap-2 bg-white hover:bg-neutral-200 text-black text-sm font-bold px-7 py-3 rounded-full transition-all">
+                <Mail size={16} /> Email Me Now
+              </a>
+              <button onClick={() => setShowModal(true)} className="inline-flex items-center gap-2 backdrop-blur-md bg-white/10 hover:bg-white/20 text-white text-sm font-bold px-7 py-3 rounded-full border border-white/20 transition-all">
+                <FileText size={16} /> Request CV
+              </button>
             </div>
+          </div>
+
+          {/* RIGHT: ProfileCard */}
+          <div className="flex justify-end items-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8 }}
+            >
+              <ProfileCard
+                avatarUrl="/images/profile.jpg"
+                miniAvatarUrl="/images/profile.jpg"
+                name="Benson"
+                title="Software Engineer"
+                handle="bricohermoso"
+                status="Open to work"
+                contactText="Contact"
+                onContactClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                enableTilt={true}
+                enableMobileTilt={false}
+                behindGlowEnabled={true}
+              />
+            </motion.div>
+          </div>
         </div>
       </div>
 
-      {/* Modals Logic */}
+      {/* Modals */}
       <AnimatePresence>
         {showImageModal && (
           <motion.div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/95 px-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowImageModal(false)}>

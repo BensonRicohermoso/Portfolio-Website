@@ -196,7 +196,24 @@ const ProfileCardComponent = ({
   }, [tiltEngine, mobileTiltSensitivity]);
 
   useEffect(() => {
-    if (!enableTilt || !tiltEngine) return;
+    // If tilt is disabled, ensure the card sits flat and static
+    if (!enableTilt || !tiltEngine) {
+      const wrap = wrapRef.current;
+      if (wrap) {
+        wrap.style.setProperty('--pointer-x', '50%');
+        wrap.style.setProperty('--pointer-y', '50%');
+        wrap.style.setProperty('--background-x', '50%');
+        wrap.style.setProperty('--background-y', '50%');
+        wrap.style.setProperty('--pointer-from-center', '0');
+        wrap.style.setProperty('--pointer-from-top', '0.5');
+        wrap.style.setProperty('--pointer-from-left', '0.5');
+        wrap.style.setProperty('--rotate-x', '0deg');
+        wrap.style.setProperty('--rotate-y', '0deg');
+        wrap.style.setProperty('--card-opacity', '1');
+      }
+      return;
+    }
+
     const shell = shellRef.current;
     if (!shell) return;
 
@@ -311,6 +328,22 @@ const ProfileCardComponent = ({
 
   const handleContactClick = useCallback(() => { onContactClick?.(); }, [onContactClick]);
 
+  // When tilt is disabled, lock the section transform to flat
+  const sectionStyle = {
+    height: '420px',
+    maxHeight: '420px',
+    aspectRatio: '0.718',
+    borderRadius: cardRadius,
+    backgroundBlendMode: 'color-dodge, normal, normal, normal',
+    boxShadow: enableTilt
+      ? 'rgba(0,0,0,0.8) calc((var(--pointer-from-left)*10px) - 3px) calc((var(--pointer-from-top)*20px) - 6px) 20px -5px'
+      : 'rgba(0,0,0,0.6) 0px 8px 30px -5px',
+    transition: 'transform 1s ease',
+    transform: 'translateZ(0) rotateX(0deg) rotateY(0deg)',
+    background: 'rgba(0,0,0,0.9)',
+    pointerEvents: enableTilt ? 'auto' : 'none',
+  };
+
   return (
     <div
       ref={wrapRef}
@@ -323,33 +356,23 @@ const ProfileCardComponent = ({
           style={{
             background: `radial-gradient(circle at var(--pointer-x) var(--pointer-y), var(--behind-glow-color) 0%, transparent var(--behind-glow-size))`,
             filter: 'blur(50px) saturate(1.1)',
-            opacity: 'calc(0.8 * var(--card-opacity))'
+            opacity: enableTilt ? 'calc(0.8 * var(--card-opacity))' : '0'
           }}
         />
       )}
       <div ref={shellRef} className="relative z-[1] group">
         <section
           className="grid relative overflow-hidden backface-hidden"
-          style={{
-            height: '420px',
-            maxHeight: '420px',
-            aspectRatio: '0.718',
-            borderRadius: cardRadius,
-            backgroundBlendMode: 'color-dodge, normal, normal, normal',
-            boxShadow: 'rgba(0,0,0,0.8) calc((var(--pointer-from-left)*10px) - 3px) calc((var(--pointer-from-top)*20px) - 6px) 20px -5px',
-            transition: 'transform 1s ease',
-            transform: 'translateZ(0) rotateX(0deg) rotateY(0deg)',
-            background: 'rgba(0,0,0,0.9)'
-          }}
-          onMouseEnter={e => {
+          style={sectionStyle}
+          onMouseEnter={enableTilt ? e => {
             e.currentTarget.style.transition = 'none';
             e.currentTarget.style.transform = 'translateZ(0) rotateX(var(--rotate-y)) rotateY(var(--rotate-x))';
-          }}
-          onMouseLeave={e => {
+          } : undefined}
+          onMouseLeave={enableTilt ? e => {
             const shell = shellRef.current;
             e.currentTarget.style.transition = shell?.classList.contains('entering') ? 'transform 180ms ease-out' : 'transform 1s ease';
             e.currentTarget.style.transform = 'translateZ(0) rotateX(0deg) rotateY(0deg)';
-          }}
+          } : undefined}
         >
           <div
             className="absolute inset-0"
@@ -370,14 +393,16 @@ const ProfileCardComponent = ({
                 loading="lazy"
                 style={{
                   transformOrigin: '50% 100%',
-                  transform: 'translateX(calc(-50% + (var(--pointer-from-left) - 0.5) * 6px)) translateZ(0) scaleY(calc(1 + (var(--pointer-from-top) - 0.5) * 0.02)) scaleX(calc(1 + (var(--pointer-from-left) - 0.5) * 0.01))',
+                  transform: enableTilt
+                    ? 'translateX(calc(-50% + (var(--pointer-from-left) - 0.5) * 6px)) translateZ(0) scaleY(calc(1 + (var(--pointer-from-top) - 0.5) * 0.02)) scaleX(calc(1 + (var(--pointer-from-left) - 0.5) * 0.01))'
+                    : 'translateX(-50%) translateZ(0)',
                   borderRadius: cardRadius
                 }}
                 onError={e => { e.target.style.display = 'none'; }}
               />
               {showUserInfo && (
                 <div
-                  className="absolute z-[2] flex items-center justify-between backdrop-blur-[30px] border border-white/10 pointer-events-auto"
+                  className="absolute z-[2] flex items-center justify-between backdrop-blur-[30px] border border-white/10"
                   style={{
                     '--ui-inset': '20px',
                     '--ui-radius-bias': '6px',
@@ -386,7 +411,8 @@ const ProfileCardComponent = ({
                     right: 'var(--ui-inset)',
                     background: 'rgba(255,255,255,0.1)',
                     borderRadius: 'calc(max(0px, var(--card-radius) - var(--ui-inset) + var(--ui-radius-bias)))',
-                    padding: '8px 10px'
+                    padding: '8px 10px',
+                    pointerEvents: 'auto',
                   }}
                 >
                   <div className="flex items-center gap-2">
@@ -422,7 +448,9 @@ const ProfileCardComponent = ({
             <div
               className="max-h-full overflow-hidden text-center relative z-[5]"
               style={{
-                transform: 'translate3d(calc(var(--pointer-from-left)*-6px + 3px),calc(var(--pointer-from-top)*-6px + 3px),0.1px)',
+                transform: enableTilt
+                  ? 'translate3d(calc(var(--pointer-from-left)*-6px + 3px),calc(var(--pointer-from-top)*-6px + 3px),0.1px)'
+                  : 'translate3d(0,0,0.1px)',
                 mixBlendMode: 'luminosity',
                 gridArea: '1 / -1',
                 borderRadius: cardRadius,
