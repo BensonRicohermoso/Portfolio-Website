@@ -2,7 +2,12 @@
 export default {
   content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        background: 'oklch(1 0 0)',
+        foreground: 'oklch(0.145 0 0)',
+      },
+    },
   },
   plugins: [],
 }

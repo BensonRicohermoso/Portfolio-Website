@@ -60,7 +60,7 @@ export default function About() {
       className="flex flex-col md:flex-row min-h-screen w-full"
     >
       {/* ── Left Div ── 50% width, about text */}
-      <div className="w-full md:w-1/2 flex items-center justify-center py-24 px-6 md:px-12 pl-16 md:pl-40">
+      <div className="w-full md:w-1/2 flex items-center justify-center py-6 md:py-24 px-4 md:px-12 pl-0 md:pl-40">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}

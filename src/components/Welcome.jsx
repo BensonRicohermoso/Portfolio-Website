@@ -15,7 +15,7 @@ export default function Welcome({ onClick }) {
   return (
     <div 
       onClick={handleClick}
-      className="h-screen bg-gradient-to-br from-primary to-secondary relative cursor-pointer overflow-hidden overflow-x-hidden max-w-full"
+      className="h-screen bg-[#080808] bg-gradient-to-br from-primary to-secondary relative cursor-pointer overflow-hidden overflow-x-hidden max-w-full"
     >
       {/* Animated Background Particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
