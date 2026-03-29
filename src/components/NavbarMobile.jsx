@@ -40,7 +40,7 @@ export default function NavbarMobile() {
       {open && (
         <nav
           className="fixed inset-0 z-[1200] bg-[#111111] bg-opacity-95 flex flex-col scrollbar-hide"
-          style={{ minHeight: '100vh', overflowY: 'auto', msOverflowStyle: 'none', scrollbarWidth: 'none' }}
+          style={{ minHeight: '100vh', overflowY: 'hidden', msOverflowStyle: 'none', scrollbarWidth: 'none' }}
         >
           <div className="flex items-center justify-end px-4 pt-4 pb-2">
             <button

@@ -33,6 +33,13 @@ body {
   .glow-border {
     box-shadow: 0 0 24px 6px rgba(255, 255, 255, 0.2);
   }
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari */
+  }
   .bg-dark-base    { background-color: #080808; }
   .bg-dark-card    { background-color: #111111; }
   .bg-dark-section { background-color: #0d0d0d; }

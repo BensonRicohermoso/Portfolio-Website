@@ -166,7 +166,7 @@ function ProjectModal({ index, onClose }) {
 
         {/* Content */}
         <div
-          className="p-4 sm:p-6 overflow-y-auto"
+          className="p-4 sm:p-6 overflow-y-hidden"
           style={{ maxHeight: 'calc(90vh - 11rem)' }}
         >
           <div className="flex items-start justify-between gap-3 mb-3">
