@@ -1,30 +1,54 @@
 import { motion } from 'framer-motion'
-import InfiniteMenu from './InfiniteMenu'
+import InfiniteMenu from './Infinitemenu'
 
 // Placeholder items — swap out images/links/titles when ready
 const items = [
   {
-    image: '/images/project-cards/ithink-1.png',
+    image: '/images/project-cards/Ithink-1.png',
     link: 'https://weareithink.vercel.app',
-    title: '',
+    title: ' ',
+    description: ' '
+  },
+  {
+    image: '/images/about-cards/aws-certi.png',
+    link: ' ',
+    title: ' ',
     description: ''
   },
   {
-    image: '/images/project-cards/xenor-1.png',
+    image: '/images/project-cards/xernor-1.png',
     link: 'https://xenor-ai.vercel.app',
-    title: '',
+    title: ' ',
+    description: ' '
+  },
+  {
+    image: '/images/about-cards/care-coding.jpg',
+    link: ' ',
+    title: ' ',
     description: ''
   },
   {
     image: '/images/project-cards/finbot-1.png',
     link: 'https://financial-management-chatbot.vercel.app',
-    title: '',
+    title: ' ',
+    description: ' '
+  },
+  {
+    image: '/images/about-cards/hackathon.jpg',
+    link: ' ',
+    title: ' ',
     description: ''
   },
   {
     image: '/images/project-cards/care-1.png',
     link: 'https://weareithink.vercel.app',
-    title: '',
+    title: ' ',
+    description: ' '
+  },
+  {
+    image: '/images/about-cards/ithink-dash.jpg',
+    link: ' ',
+    title: ' ',
     description: ''
   }
 ]
@@ -36,7 +60,7 @@ export default function About() {
       className="flex flex-col md:flex-row min-h-screen w-full"
     >
       {/* ── Left Div ── 50% width, about text */}
-      <div className="w-full md:w-1/2 flex items-center justify-center py-24 px-6 md:px-12">
+      <div className="w-full md:w-1/2 flex items-center justify-center py-24 px-6 md:px-12 pl-16 md:pl-40">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
