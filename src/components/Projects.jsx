@@ -86,7 +86,7 @@ function ProjectModal({ index, onClose }) {
 
   return (
     <motion.div
-className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -94,28 +94,32 @@ className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4"
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
 
-      {/* Modal */}
+      {/* Modal — bottom sheet on mobile, centered card on sm+ */}
       <motion.div
         key={index}
-className="relative w-full max-w-[95vw] sm:max-w-2xl bg-[#111111] border border-[#222222] rounded-2xl overflow-hidden shadow-2xl mx-0"
-        style={{ maxHeight: '95vh' }}
-        initial={{ scale: 0.85, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.85, opacity: 0 }}
-        transition={{ duration: 0.25 }}
+        className="relative w-full sm:w-auto sm:max-w-2xl sm:mx-4 bg-[#111111] border border-[#222222] rounded-t-2xl sm:rounded-2xl overflow-hidden shadow-2xl"
+        style={{ maxHeight: '90vh' }}
+        initial={{ y: '100%', opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: '100%', opacity: 0 }}
+        transition={{ type: 'spring', damping: 28, stiffness: 280 }}
       >
+        {/* Drag handle — mobile visual cue */}
+        <div className="flex justify-center pt-2.5 pb-0.5 sm:hidden">
+          <div className="w-10 h-1 rounded-full bg-white/20" />
+        </div>
+
         {/* Close */}
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 text-neutral-500 hover:text-white bg-black/50 rounded-full p-1 transition-colors"
+          className="absolute top-3 right-3 z-10 text-neutral-500 hover:text-white bg-black/50 rounded-full p-1.5 transition-colors"
         >
-          <X size={16} />
+          <X size={15} />
         </button>
 
-        {/* Image with arrows */}
-        <div className="relative h-44 sm:h-48 md:h-56 lg:h-64 bg-[#0a0a0a] flex items-center justify-center overflow-hidden">
+        {/* Image carousel */}
+        <div className="relative h-44 sm:h-56 bg-[#0a0a0a] flex items-center justify-center overflow-hidden">
           <AnimatePresence mode="wait">
-
             <motion.div
               key={imgIndex}
               className="absolute inset-0 flex items-center justify-center"
@@ -125,31 +129,32 @@ className="relative w-full max-w-[95vw] sm:max-w-2xl bg-[#111111] border border-
               transition={{ duration: 0.2 }}
             >
               {project.images[imgIndex] ? (
-                <img src={project.images[imgIndex]} alt={`${project.title} ${imgIndex + 1}`} className="w-full h-full object-cover" />
+                <img
+                  src={project.images[imgIndex]}
+                  alt={`${project.title} ${imgIndex + 1}`}
+                  className="w-full h-full object-cover"
+                />
               ) : (
                 <span className="text-neutral-600 text-sm">Image {imgIndex + 1}</span>
               )}
             </motion.div>
           </AnimatePresence>
 
-          {/* Left arrow */}
           <button
             onClick={handlePrev}
-            className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 z-10 bg-black/60 hover:bg-black/90 border border-white/10 hover:border-white/30 text-white rounded-full p-2 transition-all duration-200"
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-black/60 hover:bg-black/90 border border-white/10 hover:border-white/30 text-white rounded-full p-1.5 sm:p-2 transition-all duration-200"
           >
-            <ChevronLeft size={18} />
+            <ChevronLeft size={16} />
           </button>
 
-          {/* Right arrow */}
           <button
             onClick={handleNext}
-            className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 z-10 bg-black/60 hover:bg-black/90 border border-white/10 hover:border-white/30 text-white rounded-full p-2 transition-all duration-200"
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-black/60 hover:bg-black/90 border border-white/10 hover:border-white/30 text-white rounded-full p-1.5 sm:p-2 transition-all duration-200"
           >
-            <ChevronRight size={18} />
+            <ChevronRight size={16} />
           </button>
 
-          {/* Dot indicators */}
-          <div className="absolute bottom-2 sm:bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+          <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
             {project.images.map((_, i) => (
               <span
                 key={i}
@@ -160,25 +165,31 @@ className="relative w-full max-w-[95vw] sm:max-w-2xl bg-[#111111] border border-
         </div>
 
         {/* Content */}
-        <div className="p-3 sm:p-6 overflow-y-auto" style={{ maxHeight: 'calc(95vh - 10rem)' }}>
-          <div className="flex flex-col sm:flex-row items-start justify-between gap-2 sm:gap-4 mb-3">
-
-            <h3 className="text-white font-semibold text-lg sm:text-xl">{project.title}</h3>
-            <a
-              href={project.siteUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={e => e.stopPropagation()}
-              className="inline-flex items-center gap-1.5 bg-white hover:bg-neutral-200 text-black text-xs font-semibold px-3 py-1.5 rounded-full transition-colors duration-200 whitespace-nowrap flex-shrink-0 mt-2 sm:mt-0"
-            >
-              <ExternalLink size={12} />
-              Visit Site
-            </a>
+        <div
+          className="p-4 sm:p-6 overflow-y-auto"
+          style={{ maxHeight: 'calc(90vh - 11rem)' }}
+        >
+          <div className="flex items-start justify-between gap-3 mb-3">
+            <h3 className="text-white font-semibold text-base sm:text-xl leading-snug">{project.title}</h3>
+            {project.siteUrl && (
+              <a
+                href={project.siteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={e => e.stopPropagation()}
+                className="inline-flex items-center gap-1.5 bg-white hover:bg-neutral-200 text-black text-xs font-semibold px-3 py-1.5 rounded-full transition-colors duration-200 whitespace-nowrap flex-shrink-0"
+              >
+                <ExternalLink size={11} />
+                Visit Site
+              </a>
+            )}
           </div>
-          <p className="text-neutral-400 text-sm leading-relaxed mb-5">{project.description}</p>
+
+          <p className="text-neutral-400 text-sm leading-relaxed mb-4">{project.description}</p>
+
           <div>
             <p className="text-xs text-neutral-500 uppercase tracking-widest mb-2">Tech Stack</p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5">
               {project.tags.map((tag) => (
                 <span
                   key={tag}
