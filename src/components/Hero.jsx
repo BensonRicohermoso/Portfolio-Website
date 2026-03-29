@@ -154,7 +154,7 @@ export default function Hero() {
         <Threads amplitude={1} distance={0} enableMouseInteraction />
       </div>
 
-      <div className="relative z-10 max-w-6xl w-full mx-auto pt-36 pb-24">
+      <div className="relative z-10 max-w-6xl w-full mx-auto pt-8 pb-24">
         
         {/* MOBILE VIEW: Unchanged */}
         <div className="lg:hidden flex flex-col items-center">
@@ -231,10 +231,10 @@ export default function Hero() {
                 <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }}>
                     <div className="relative group">
                         {/* Soft glow background */}
-                        <div className="absolute -inset-2 bg-gradient-to-tr from-white/10 to-transparent rounded-[2.5rem] blur-2xl opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+                        <div className="absolute -inset-2 bg-gradient-to-tr from-white/10 to-transparent rounded-2xl blur-2xl opacity-20 group-hover:opacity-40 transition duration-1000"></div>
                         
                         {/* Portrait Frame: Reduced Width (380px), Increased Height (560px) */}
-                        <div className="relative w-[380px] h-[560px] rounded-[2.5rem] border-2 border-white/10 overflow-hidden bg-[#111] shadow-2xl">
+                        <div className="relative w-[380px] h-[420px] rounded-2xl border-2 border-white/10 overflow-hidden bg-[#111] shadow-2xl">
                             <img 
                                 src="/images/profile.jpg" 
                                 alt="Benson Ricohermoso" 
