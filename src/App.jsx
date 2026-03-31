@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 
 import Welcome from './components/Welcome';
+import CustomCursor from './components/CustomCursor';
 import Navbar from './components/Navbar';
 import NavbarMobile from './components/NavbarMobile';
 import Hero from './components/Hero';
@@ -36,7 +37,12 @@ export default function App() {
   };
 
   if (showWelcome) {
-    return <Welcome onClick={handleWelcomeClick} />;
+    return (
+      <>
+        {!isMobile && <CustomCursor />}
+        <Welcome onClick={handleWelcomeClick} />
+      </>
+    );
   }
 
   const techLogos = [
@@ -47,7 +53,10 @@ export default function App() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#080808] text-slate-300 overflow-x-hidden">
+    <>
+      {/* Custom Cursor Overlay (desktop only) */}
+      {!isMobile && <CustomCursor />}
+      <div className="min-h-screen bg-[#080808] text-slate-300 overflow-x-hidden">
       {/* Show NavbarMobile on mobile, Navbar on sm+ */}
       <div className="block sm:hidden">
         <NavbarMobile />
@@ -86,6 +95,7 @@ export default function App() {
       <Certifications />
       <Footer />
       <ChatBot />
-    </div>
+      </div>
+    </>
   );
 }
